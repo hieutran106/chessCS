@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessCS
 {
-    class ChessBoard
+    public class ChessBoard
     {
         /*
          * chess piece = WHITE / black
@@ -19,12 +19,12 @@ namespace ChessCS
          *  
          */
 
-        private char[,] board;
+        public char[,] Board { get; set; }
         public ChessBoard()
         {
-            board = new char[8, 8];
+            Board = new char[8, 8];
         }
-        public char[,] Board { get; set; }
+        
         //Reset the board
         public void Reset()
         {
@@ -55,14 +55,14 @@ namespace ChessCS
                         if (!int.TryParse(charAt.ToString(), out number))
                         {
                             //Character is a chess piece
-                            board[i, index] = charAt;
+                            Board[i, index] = charAt;
                             index++;
                         } else
                         {
                             //insert empty square into board
                             for (int k=0;k<number;k++)
                             {
-                                board[i, index + k] = '.';
+                                Board[i, index + k] = '.';
                             }
                             index += number;
                         }
@@ -86,7 +86,7 @@ namespace ChessCS
                     int i = position[0] - 97;
                     //convert char '1' -> '8' to number
                     int j = position[1] - 49;
-                    board[i, j] = p;
+                    Board[i, j] = p;
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace ChessCS
         }
         public bool HasWhitePiece(int x, int y)
         {
-            char value = board[x, y];
+            char value = Board[x, y];
             if (value == 'P' || value == 'N' || value == 'R' || value == 'B' || value == 'Q' || value == 'K')
                 return true;
             else return false;
@@ -128,7 +128,7 @@ namespace ChessCS
                 Console.Write($"{8-i} |");
                 for (int j=0;j<8;j++)
                 {
-                    Console.Write($"  {(char)board[i, j]}");
+                    Console.Write($"  {(char)Board[i, j]}");
                 }
                 Console.WriteLine(" |");
             }

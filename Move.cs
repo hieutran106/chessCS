@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessCS
 {
-    class Move
+    public class Move
     {
         public int Des_X { get; set; }
         public int Des_Y { get; set; }
@@ -36,7 +36,7 @@ namespace ChessCS
         }
         public override string ToString()
         {
-            StringBuilder move = new StringBuilder(7);
+            StringBuilder move = new StringBuilder(40);
             move.Append(PositionFromCoordinate(Src_X, Src_Y));
             if (IsCapture)
             {
@@ -44,6 +44,7 @@ namespace ChessCS
             }
             else move.Append(" --");
             move.Append(PositionFromCoordinate(Des_X, Des_Y));
+            move.Append($" ([{Src_X},{Src_Y}] - [{Des_X},{Des_Y}])");
             return move.ToString();
         }
     }

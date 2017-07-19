@@ -12,27 +12,37 @@ namespace ChessCS
 {
     public partial class MainForm : Form
     {
-        public const int SIZE = 50;
+        
+        private ChessBoard chessBoard;
+
+        public ChessBoard ChessBoard {
+            get
+            {
+                return chessBoard;
+            }
+            set
+            {
+                chessBoard = value;
+                for (int i = 0; i < 8; i++)
+                    for (int j = 0; j < 8; j++)
+                        boardGUI[i, j].Piece = chessBoard.Board[i, j];
+            }
+        }
+        private SquareBox[,] boardGUI;
         public MainForm()
         {
             InitializeComponent();
-        }
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            Graphics g = e.Graphics;
-            using (SolidBrush brush = new SolidBrush(Color.White))
-            {
-                for (int i = 0; i < 8; i++)
-                    for (int j = 0; j < 8; j++)
-                    {
-                        //Draw chess board
-                        Color color = ((i + j) % 2 == 0) ? Color.White : Color.Black;
-                        brush.Color = color;
-                        g.FillRectangle(brush, i * SIZE, j * SIZE, SIZE, SIZE);
-                        //draw chess piece
-                    }
-            }
+
+            //init board GUI
+            boardGUI = new SquareBox[8, 8];
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    boardGUI[i, j] = new SquareBox(i, j);
+                    this.Controls.Add(boardGUI[i, j]);
+                }
+                    
+
         }
     }
 }
