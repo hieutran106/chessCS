@@ -11,58 +11,23 @@ namespace ChessCS.ChessPieces
         public static List<Move> generateMove(int x, int y, ChessBoard chessBoard)
         {
             List<Move> moves = new List<Move>();
-            //vertical moves
-            if (x>0)
-            {
-                for (int i = x-1; i >= 0; i--)
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
                 {
-                    if (chessBoard.Board[i, y] == '.')
+                    if (i!=j) //only move vertically and horizontally
                     {
-                        Move move = chessBoard.GetMove(x, y, i, y);
-                        moves.Add(move);
-                    }
-                    else break;
+                        int step = 1;
+                        int des_x = x + i * step;
+                        int des_y = y + y * step;
+                        while (ChessBoard.IsValidCoordinate(des_x, des_y) && chessBoard.CanBlackMove(des_x, des_y))
+                        {
+                            Move move = new Move(x, y, des_x, des_y, chessBoard);
+                            moves.Add(move);
+                            step++;
+                        }
+                    }                  
                 }
-
-            }
-             
-            if (x<7)
-            {
-                for (int i=x+1;i<=7;i++)
-                {
-                    if (chessBoard.Board[i, y] == '.')
-                    {
-                        Move move = chessBoard.GetMove(x, y, i, y);
-                        moves.Add(move);
-                    }
-                    else break;
-                }
-            }
-            //horizontal moves
-            if (y>0)
-            {
-                for (int i=y-1;i>=0;i--)
-                {
-                    if (chessBoard.Board[x, i] == '.')
-                    {
-                        Move move = chessBoard.GetMove(x, y, x, i);
-                        moves.Add(move);
-                    }
-                    else break;
-                }
-            }
-            if (y<7)
-            {
-                for (int i=y+1;y<=7;i++)
-                {
-                    if (chessBoard.Board[x,i]=='.')
-                    {
-                        Move move = chessBoard.GetMove(x, y, x, i);
-                        moves.Add(move);
-                    }
-                }
-            }
-            return null;
+            return moves;
         }
     }
 }

@@ -108,7 +108,13 @@ namespace ChessCS
                 return true;
             else return false;
         }
-       
+        //If position is empty or can capture a white piece
+        public bool CanBlackMove(int x,int y)
+        {
+            if (Board[x, y] == '.' || HasWhitePiece(x, y))
+                return true;
+            else return false;
+        }
         //
         public List<Move> possibleMoves()
         {

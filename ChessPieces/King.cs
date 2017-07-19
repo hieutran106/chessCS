@@ -21,7 +21,7 @@ namespace ChessCS.ChessPieces
                 int x_des = x + delta[i, 0];
                 int y_des = y + delta[i, 1];
                 if (ChessBoard.IsValidCoordinate(x_des, y_des) 
-                    && (chessBoard.Board[x_des, y_des] == '.' || chessBoard.HasWhitePiece(x_des, y_des))
+                    && chessBoard.CanBlackMove(x_des,y_des)
                     && IsKingSafe(chessBoard))
                 {
                     Move move = chessBoard.GetMove(x, y, x, y + 1);
