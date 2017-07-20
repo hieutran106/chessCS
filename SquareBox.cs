@@ -17,6 +17,7 @@ namespace ChessCS
         public const int SIZE = 50;
         public int X { set; get; }
         public int Y { set; get; }
+        public bool IsHightlight;
         private bool isWhiteSquare;
 
         private char piece;
@@ -25,12 +26,12 @@ namespace ChessCS
                 piece = value;
                 if (piece=='.')
                 {
-                    this.BackgroundImage = null;
+                    this.ImageLocation = null;
                 } else
                 {
                     string dir = Path.GetDirectoryName(Application.ExecutablePath);
                     string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
-                    this.BackgroundImage = System.Drawing.Image.FromFile(filename);
+                    this.ImageLocation = filename;
                 }
                 
             } }
@@ -39,11 +40,23 @@ namespace ChessCS
         {
             X = x;
             Y = y;
-            Piece = '.';
+            piece = '.';
             this.Size = new Size(SIZE, SIZE);
-            this.Location = new Point(x * SIZE, y * SIZE);
+            this.Location = new Point(y * SIZE, x * SIZE);
             this.BackColor = ((x + y) % 2 == 0) ? whiteColor : darkColor;
+            SizeMode = PictureBoxSizeMode.StretchImage;
 
-        } 
+            
+        }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            if (IsHightlight)
+            {
+                ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, Color.Red, ButtonBorderStyle.Solid);
+            }
+            
+        }
+        
     }
 }

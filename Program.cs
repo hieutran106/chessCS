@@ -17,11 +17,7 @@ namespace ChessCS
             ChessBoard cb = new ChessBoard();
             cb.Reset();
             cb.PrintBoard();
-            Console.WriteLine("=============");
-            Console.WriteLine(cb.GetMove(0, 5, 0, 6));
-            Console.WriteLine(cb.GetMove(0, 5, 1, 6));
 
-            
             //Show main form
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -29,8 +29,8 @@ namespace ChessCS
         public void Reset()
         {
             //FEN for starting position
-            //string startingPosition = "rnbqkbnr/pppppppp/3p4/8/8/8/PPPPPPPP/RNBQKBNR w";
-            string startingPosition = "3p4/2K1pp2/3p4/8/8/8/PPPPPPPP/RNBQKBNR w";
+            string startingPosition = "rnbqkbnr/pppppppp/3p4/8/8/8/PPPPPPPP/RNBQKBNR w";
+            //string startingPosition = "3p4/2K1pp2/3p4/8/8/8/PPPPPPPP/RNBQKBNR w";
             Load(startingPosition);
         }
         //Returns the FEN string for the current board
