@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddPieceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddPieceForm.Designer.cs">
+      <DependentUpon>AddPieceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChessBoard.cs" />
     <Compile Include="ChessPieces\Bishop.cs" />
     <Compile Include="ChessPieces\ChessPiece.cs" />
@@ -66,6 +72,9 @@
     <Compile Include="SquareBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="AddPieceForm.resx">
+      <DependentUpon>AddPieceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

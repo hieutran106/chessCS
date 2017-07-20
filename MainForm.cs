@@ -61,6 +61,12 @@ namespace ChessCS
                     
 
         }
+        //Put a piece
+        public void Put_Piece(int x,int y, char piece)
+        {
+            chessBoard.Board[x, y] = piece;
+            boardGUI[x, y].Piece = piece;
+        }
         private void SquareBox_Click(object sender, MouseEventArgs e)
         {
             if (e.Button==MouseButtons.Left)
@@ -71,9 +77,25 @@ namespace ChessCS
         }
         private void AddPieceItem_Click(object sender, EventArgs e)
         {
+            MenuItem menuItem = sender as MenuItem;
 
-            Console.WriteLine($"sender: {sender}, event: {e}");
-
+            if (menuItem != null)
+            {
+                ContextMenu contextMenu = menuItem.GetContextMenu();
+                //Get picture box
+                Control sourceControl = contextMenu.SourceControl;
+                SquareBox squareBox = sourceControl as SquareBox;
+                if (squareBox != null)
+                {
+                    //remove piece
+                    //get position
+                    int x = squareBox.X;
+                    int y = squareBox.Y;
+                    //update
+                    AddPieceForm form = new AddPieceForm(x,y,this);
+                    form.Show();
+                }
+            }
 
         }
         private void RemovePieceItem_Click(object sender, EventArgs e)
@@ -92,9 +114,8 @@ namespace ChessCS
                     //get position
                     int x = squareBox.X;
                     int y = squareBox.Y;
-                    //update
-                    chessBoard.Board[x, y] = '.';
-                    boardGUI[x, y].Piece = '.';
+                    //remove a chess piece
+                    Put_Piece(x, y, '.');
                 }
                 
                 
