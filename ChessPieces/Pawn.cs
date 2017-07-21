@@ -13,15 +13,15 @@ namespace ChessCS.ChessPieces
             List<Move> moves = new List<Move>();
             //Color of chess piece at [x,y]
             bool color = char.IsUpper(chessBoard.Board[x, y]);
-            int dy = (color == ChessPiece.BLACK) ? 1 : -1;
+            int dx = (color == ChessPiece.BLACK) ? 1 : -1;
 
              
-            //Move ahead
-            if (ChessBoard.IsValidCoordinate(x, y + dy) && chessBoard.Board[x, y + dy] == '.')
+            //Move ahead, no capture
+            if (ChessBoard.IsValidCoordinate(x+dx, y) && chessBoard.Board[x+dx, y] == '.')
             {
-                Move move = chessBoard.GetMove(x, y, x, y + 1);
+                Move move = chessBoard.GetMove(x, y, x+dx, y);
                 //promotion
-                if ((color==BLACK && y==6)|| (!color==WHITE && y==1)) {
+                if ((color==BLACK && x==6)|| (!color==WHITE && x==1)) {
                     move.PawnPromotion = true;
                 }
                 moves.Add(move);
@@ -29,8 +29,8 @@ namespace ChessCS.ChessPieces
             
             
             //capture, diagonally forward one square to the left or right
-            //dx = -1 : to the left; dx = 1: to the right
-            for (int dx=-1;dx<=1;dx++)
+            //dy = -1 : to the left; dy = 1: to the right
+            for (int dy=-1;dy<=1;dy=dy+2)
             {
                 int x_des = x + dx;
                 int y_des = y + dy;
@@ -38,7 +38,7 @@ namespace ChessCS.ChessPieces
                 {
                     Move move = chessBoard.GetMove(x, y, x_des, y_des);
                     //promotion
-                    if ((color==BLACK && y == 6) || (color==WHITE && y == 1))
+                    if ((color==BLACK && x == 6) || (color==WHITE && x == 1))
                     {
                         move.PawnPromotion = true;
                     }
@@ -48,16 +48,16 @@ namespace ChessCS.ChessPieces
             //Move two squares from starting point
             if (color==WHITE)
             {
-                if (y==6 && chessBoard.Board[x,5]=='.' && chessBoard.Board[x,4]=='.')
+                if (x==6 && chessBoard.Board[5,y]=='.' && chessBoard.Board[4,y]=='.')
                 {
-                    Move move = chessBoard.GetMove(x, y, x, 4 );
+                    Move move = chessBoard.GetMove(x, y, 4, y );
                     moves.Add(move);
                 }
             } else //color = BLACK
             {
-                if (y == 1 && chessBoard.Board[x, 2] == '.' && chessBoard.Board[x, 3] == '.')
+                if (x == 1 && chessBoard.Board[2, y] == '.' && chessBoard.Board[3, y] == '.')
                 {
-                    Move move = chessBoard.GetMove(x, y, x, 3);
+                    Move move = chessBoard.GetMove(x, y, 3, y);
                     moves.Add(move);
                 }
             }

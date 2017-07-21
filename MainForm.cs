@@ -16,7 +16,7 @@ namespace ChessCS
         
         private ChessBoard chessBoard;
         private bool isSelected;
-        private int x_seclect, y_select;
+        private int x_select, y_select;
         private List<Move> possibleMoves;
         public ChessBoard ChessBoard {
             get
@@ -72,74 +72,76 @@ namespace ChessCS
         }
         private void SquareBox_Click(object sender, MouseEventArgs e)
         {
-            if (e.Button==MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 SquareBox p = (SquareBox)sender;
-                Console.WriteLine($"Click on squareBox[{p.X},{p.Y}]");
-                if (chessBoard.Board[p.X,p.Y]!='.' && isSelected == false) //Click on a chess piece
-                {                  
-                        isSelected = true;
-                        x_seclect = p.X;
-                        y_select = p.Y;
-                        //show border
-                        boardGUI[x_seclect, y_select].IsHightlight = true;
-                        //show border for possible move
-                        if (char.IsLower(chessBoard.Board[x_seclect,y_select])) // is black piece
+                if (chessBoard.Board[p.X, p.Y] != '.' && isSelected == false) //Click on a chess piece
+                {
+                    
+                    isSelected = true;
+                    x_select = p.X;
+                    y_select = p.Y;
+                    Console.WriteLine($"Selected {chessBoard.Board[x_select, y_select]} at [{p.X},{p.Y}]");
+                    //show border
+                    boardGUI[x_select, y_select].IsHightlight = true;
+                    //show border for possible move
+                    char piece = char.ToUpper(chessBoard.Board[x_select, y_select]);
+                    switch (piece)
                     {
-                        Console.WriteLine("Show possible moves for black piece");
-                        switch (chessBoard.Board[x_seclect,y_select])
+                        case 'P':
+                            possibleMoves = Pawn.generateMove(x_select, y_select, chessBoard);
+                            break;
+                        case 'R':
+                            possibleMoves = Rook.generateMove(x_select, y_select, chessBoard);
+                            break;
+                        case 'N':
+                            possibleMoves = Knight.generateMove(x_select, y_select, chessBoard);
+                            break;
+                        case 'B':
+                            possibleMoves = Bishop.generateMove(x_select, y_select, chessBoard);
+                            break;
+                        case 'Q':
+                            possibleMoves = Queen.generateMove(x_select, y_select, chessBoard);
+                            break;
+                        case 'K':
+                            possibleMoves = King.generateMove(x_select, y_select, chessBoard);
+                            break;
+                        default:
+                            break;
+                    }
+                    if (possibleMoves != null)
+                    {
+                        
+                        foreach (Move move in possibleMoves)
                         {
-                            case 'p':
-                                possibleMoves=Pawn.generateMove(x_seclect, y_select, chessBoard);
-                                break;
-                            case 'r':
-                                possibleMoves = Rook.generateMove(x_seclect, y_select, chessBoard);
-                                break;
-                            case 'n':
-                                possibleMoves = Knight.generateMove(x_seclect, y_select, chessBoard);
-                                break;
-                            case 'b':
-                                possibleMoves = Bishop.generateMove(x_seclect, y_select, chessBoard);
-                                break;
-                            case 'q':
-                                possibleMoves = Queen.generateMove(x_seclect, y_select, chessBoard);
-                                break;
-                            case 'k':
-                                possibleMoves = King.generateMove(x_seclect, y_select, chessBoard);
-                                break;
-                            default:
-                                break;                    
-                        }
-                        if (possibleMoves != null)
-                        {
-                            foreach (Move move in possibleMoves)
-                            {
-                                int x_des = move.Des_X;
-                                int y_des = move.Des_Y;
-                                Console.WriteLine($"Hightlight [{x_des},{y_des}]");
-                                boardGUI[x_seclect, y_select].IsHightlight = true;
-                            }
+                            int x_des = move.Des_X;
+                            int y_des = move.Des_Y;                            
+                            boardGUI[x_des, y_des].IsHightlight = true;
                         }
                     }
 
-                } else if (isSelected==true) {
-                    isSelected = false;
-                    boardGUI[x_seclect, y_select].IsHightlight = false;
-                    x_seclect = -1;
-                    y_select = -1;
 
+                }
+                else if (isSelected == true)
+                {
+                    Console.WriteLine($"De_select at [{x_select},{y_select}]");
+                    isSelected = false;
+                    boardGUI[x_select, y_select].IsHightlight = false;
+                    x_select = -1;
+                    y_select = -1;
+                    
                     //remove hightlight in possible move
-                    if (possibleMoves!=null)
+                    if (possibleMoves != null)
                     {
                         foreach (Move move in possibleMoves)
                         {
                             int x_des = move.Des_X;
                             int y_des = move.Des_Y;
-                            boardGUI[x_seclect, y_select].IsHightlight = false;
+                            boardGUI[x_des, y_des].IsHightlight = false;
                         }
                         possibleMoves = null;
                     }
-                    
+
                 }
             }
         }

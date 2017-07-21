@@ -14,13 +14,14 @@ namespace ChessCS
         public static Color darkColor = Color.FromArgb(118, 150, 86);
         public static Color whiteColor = Color.FromArgb(238, 238, 210);
 
-        public const int SIZE = 50;
+        public const int SIZE = 60;
         public int X { set; get; }
         public int Y { set; get; }
         private bool isHightlight;
         public bool IsHightlight { get { return isHightlight; } set {
                 isHightlight = value;
                 this.Invalidate();
+                Console.WriteLine($"Hightlight [{X},{Y}]");
             } }
         
 
@@ -59,7 +60,11 @@ namespace ChessCS
             {
                 ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, Color.Red, ButtonBorderStyle.Solid);
             }
-            
+            using (Font myFont = new Font("Arial", 10))
+            {
+                e.Graphics.DrawString($"[{X},{Y}]", myFont, Brushes.Red, new Point(2, 2));
+            }
+
         }
         
     }

@@ -12,7 +12,7 @@ namespace ChessCS.ChessPieces
         {
             List<Move> moves = new List<Move>();
             //Color of chess piece at [x,y]
-            char color = char.IsUpper(chessBoard.Board[x, y]) ? 'w' : 'b';
+            bool color = char.IsUpper(chessBoard.Board[x, y]);
             for (int i=-1;i<=1;i++) 
                 for (int j=-1;j<=1;j++)
                 {
