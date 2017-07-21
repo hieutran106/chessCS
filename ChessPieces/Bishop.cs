@@ -18,11 +18,11 @@ namespace ChessCS.ChessPieces
                 {
                     //only move in diagonal lines
                     int step = 1;
-                    int des_x = x + i * step;
-                    int des_y = y + y * step;
-                    while (ChessBoard.IsValidCoordinate(des_x, des_y) && chessBoard.CanMakeMove(des_x, des_y,color))
+                    int x_des = x + i * step;
+                    int y_des = y + y * step;
+                    while (ChessBoard.IsValidCoordinate(x_des, y_des) && chessBoard.CanMakeMove(x_des, y_des,color))
                     {
-                        Move move = new Move(x, y, des_x, des_y, chessBoard);
+                        Move move = new Move(x, y, x_des, y_des, chessBoard);
                         moves.Add(move);
                         step++;
                     }

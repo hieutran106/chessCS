@@ -14,11 +14,10 @@ namespace ChessCS
         [STAThread]
         static void Main()
         {
-            Console.WriteLine(char.IsUpper('.'));
-            Console.WriteLine(char.IsLower('.'));
+            
             ChessBoard cb = new ChessBoard();
             cb.Reset();
-            cb.PrintBoard();
+            cb.Load("rnbqk2r/ppp1bppp/4pn2/3p4/3P4/N1P1B3/PP2PPPP/R2QKBNR w KQkq d6 0 5 ");
 
             //Show main form
             Application.EnableVisualStyles();

@@ -30,14 +30,39 @@ namespace ChessCS
         public void Reset()
         {
             //FEN for starting position
-            string startingPosition = "rnbqkbnr/pppppppp/3p4/8/8/8/PPPPPPPP/RNBQKBNR w";
-            //string startingPosition = "3p4/2K1pp2/3p4/8/8/8/PPPPPPPP/RNBQKBNR w";
+            string startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w";
             Load(startingPosition);
         }
         //Returns the FEN string for the current board
         public string GetFEN()
         {
-            return null;
+            StringBuilder fen_str = new StringBuilder(50);
+            for (int i=0;i<8;i++)
+            {
+                int number = 0;
+                for (int j=0;j<8;j++)
+                {
+                    if (Board[i,j]!='.')
+                    {
+                        fen_str.Append(Board[i, j]);
+                       
+                    } else
+                    {
+                        number++;
+                        int next = j + 1;
+                        if (next == 8 || (Board[i, next] != '.'))
+                        {
+                            fen_str.Append(number);
+                            number = 0;
+                        }
+                        
+
+                    }
+                }
+                if (i<7)
+                    fen_str.Append('/');                                 
+            }
+            return fen_str.ToString();
         }
         public void Load(string fen)
         {

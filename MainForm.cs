@@ -168,6 +168,12 @@ namespace ChessCS
             }
 
         }
+
+        private void getFENBtn_Click(object sender, EventArgs e)
+        {
+            logTextBox.AppendText(chessBoard.GetFEN());
+        }
+
         private void RemovePieceItem_Click(object sender, EventArgs e)
         {
             MenuItem menuItem = sender as MenuItem;
