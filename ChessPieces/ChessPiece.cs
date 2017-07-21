@@ -8,6 +8,7 @@ namespace ChessCS.ChessPieces
 {
     class ChessPiece
     {
-        
+        public static bool BLACK = false;
+        public static bool WHITE =  true;
     }
 }

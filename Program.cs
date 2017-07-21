@@ -14,6 +14,8 @@ namespace ChessCS
         [STAThread]
         static void Main()
         {
+            Console.WriteLine(char.IsUpper('.'));
+            Console.WriteLine(char.IsLower('.'));
             ChessBoard cb = new ChessBoard();
             cb.Reset();
             cb.PrintBoard();

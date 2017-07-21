@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessCS.ChessPieces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -101,21 +102,24 @@ namespace ChessCS
             Move move = new ChessCS.Move(src_x, src_y, des_x, des_y, this);
             return move;
         }
-        public bool HasWhitePiece(int x, int y)
+        public bool CanMakeMove(int x,int y, bool color)
         {
-            char value = Board[x, y];
-            if (value == 'P' || value == 'N' || value == 'R' || value == 'B' || value == 'Q' || value == 'K')
+            if (IsCellClear(x, y) || CanCapture(x, y, color))
                 return true;
             else return false;
         }
-        //If position is empty or can capture a white piece
-        public bool CanBlackMove(int x,int y)
+        public bool CanCapture(int x,int y, bool color)
         {
-            if (Board[x, y] == '.' || HasWhitePiece(x, y))
+            if ((color == ChessPiece.WHITE && char.IsLower(Board[x, y])) //IsLower --> black
+                || (color == ChessPiece.BLACK && char.IsUpper(Board[x, y]))) //IsUpper --> white
                 return true;
             else return false;
         }
-        //
+        public bool IsCellClear(int x,int y)
+        {
+            return Board[x, y] == '.';
+        }
+       
         public List<Move> possibleMoves()
         {
             return null;

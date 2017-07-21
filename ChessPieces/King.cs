@@ -15,13 +15,15 @@ namespace ChessCS.ChessPieces
         public static List<Move> generateMove(int x, int y, ChessBoard chessBoard)
         {
             List<Move> moves = new List<Move>();
+            //Color of chess piece at [x,y]
+            bool color = char.IsUpper(chessBoard.Board[x, y]);
             //GetLeng(0) - get length of dimension 0
             for (int i = 0; i < delta.GetLength(0); i++)
             {
                 int x_des = x + delta[i, 0];
                 int y_des = y + delta[i, 1];
                 if (ChessBoard.IsValidCoordinate(x_des, y_des) 
-                    && chessBoard.CanBlackMove(x_des,y_des)
+                    && chessBoard.CanMakeMove(x_des,y_des,color)
                     && IsKingSafe(chessBoard))
                 {
                     Move move = chessBoard.GetMove(x, y, x, y + 1);

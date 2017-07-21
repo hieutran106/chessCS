@@ -17,8 +17,12 @@ namespace ChessCS
         public const int SIZE = 50;
         public int X { set; get; }
         public int Y { set; get; }
-        public bool IsHightlight;
-        private bool isWhiteSquare;
+        private bool isHightlight;
+        public bool IsHightlight { get { return isHightlight; } set {
+                isHightlight = value;
+                this.Invalidate();
+            } }
+        
 
         private char piece;
         public char Piece {

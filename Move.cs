@@ -13,6 +13,7 @@ namespace ChessCS
         public int Src_X { get; set; }
         public int Src_Y { get; set; }
         public bool IsCapture { get; private set; }
+        public bool PawnPromotion { get; set; }
         public Move(int src_x, int src_y, int des_x, int des_y, ChessBoard chessBoard)
         {
             Src_X = src_x;
@@ -44,6 +45,10 @@ namespace ChessCS
             }
             else move.Append(" --");
             move.Append(PositionFromCoordinate(Des_X, Des_Y));
+            if (PawnPromotion)
+            {
+                move.Append("=Q");
+            }
             move.Append($" ([{Src_X},{Src_Y}] - [{Des_X},{Des_Y}])");
             return move.ToString();
         }
