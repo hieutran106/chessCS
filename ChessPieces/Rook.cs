@@ -8,27 +8,39 @@ namespace ChessCS.ChessPieces
 {
     class Rook
     {
+        static int[,] delta = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }; //only move vertically and horizontally
         public static List<Move> generateMove(int x, int y, ChessBoard chessBoard)
         {
             List<Move> moves = new List<Move>();
             //Color of chess piece at [x,y]
             bool color = char.IsUpper(chessBoard.Board[x, y]);
-            for (int i = -1; i <= 1; i++)
-                for (int j = -1; j <= 1; j++)
+            for (int i = 0; i < delta.GetLength(0); i++)
+            {
+                int step = 1;
+                while (true)
                 {
-                    if (i!=j) //only move vertically and horizontally
+                    int x_des = x + delta[i,0] * step;
+                    int y_des = y + delta[i,1] * step;
+                    Console.WriteLine($"Rook move candidate [{x_des},{y_des}]");
+                    if (ChessBoard.IsValidCoordinate(x_des, y_des))
                     {
-                        int step = 1;
-                        int des_x = x + i * step;
-                        int des_y = y + y * step;
-                        while (ChessBoard.IsValidCoordinate(des_x, des_y) && chessBoard.CanMakeMove(des_x, des_y,color))
+                        if (chessBoard.Board[x_des, y_des] == '.')
                         {
-                            Move move = new Move(x, y, des_x, des_y, chessBoard);
+                            Move move = new Move(x, y, x_des, y_des, chessBoard);
                             moves.Add(move);
                             step++;
                         }
-                    }                  
+                        else if (chessBoard.CanCapture(x_des, y_des, color))
+                        {
+                            Move move = new Move(x, y, x_des, y_des, chessBoard);
+                            moves.Add(move);
+                            break;
+                        }
+                        else break;
+                    }
+                    else break;
                 }
+            }
             return moves;
         }
     }

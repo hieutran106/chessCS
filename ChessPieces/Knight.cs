@@ -19,7 +19,8 @@ namespace ChessCS.ChessPieces
                 int x_des = x + delta[i,0];
                 int y_des = y + delta[i,1];
                 Console.WriteLine($"Knight move candidate [{x_des},{y_des}]");
-                if (ChessBoard.IsValidCoordinate(x_des,y_des) && chessBoard.CanMakeMove(x_des,y_des,color)) {
+                if (ChessBoard.IsValidCoordinate(x_des,y_des) && 
+                    (chessBoard.Board[x_des,y_des]=='.' || chessBoard.CanCapture(x_des,y_des,color))) {
                     Move move = chessBoard.GetMove(x, y, x_des, y_des);
                     moves.Add(move);
                 }

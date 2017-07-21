@@ -17,13 +17,28 @@ namespace ChessCS.ChessPieces
                 for (int j=-1;j<=1;j++)
                 {
                     int step = 1;
-                    int des_x = x + i * step;
-                    int des_y = y + y * step;
-                    while (ChessBoard.IsValidCoordinate(des_x,des_y) && chessBoard.CanMakeMove(des_x,des_y,color))
+                    while (true)
                     {
-                        Move move = new Move(x, y, des_x, des_y, chessBoard);
-                        moves.Add(move);
-                        step++;
+                        int x_des = x + i * step;
+                        int y_des = y + j * step;
+                        Console.WriteLine($"Queen move candidate [{x_des},{y_des}]");
+                        if (ChessBoard.IsValidCoordinate(x_des, y_des))
+                        {
+                            if (chessBoard.Board[x_des, y_des] == '.')
+                            {
+                                Move move = new Move(x, y, x_des, y_des, chessBoard);
+                                moves.Add(move);
+                                step++;
+                            }
+                            else if (chessBoard.CanCapture(x_des, y_des, color))
+                            {
+                                Move move = new Move(x, y, x_des, y_des, chessBoard);
+                                moves.Add(move);
+                                break;
+                            }
+                            else break;
+                        }
+                        else break;
                     }
                 }
             return moves;

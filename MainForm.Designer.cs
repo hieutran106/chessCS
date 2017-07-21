@@ -30,6 +30,7 @@
         {
             this.logTextBox = new System.Windows.Forms.TextBox();
             this.getFENBtn = new System.Windows.Forms.Button();
+            this.infoLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // logTextBox
@@ -50,11 +51,21 @@
             this.getFENBtn.UseVisualStyleBackColor = true;
             this.getFENBtn.Click += new System.EventHandler(this.getFENBtn_Click);
             // 
+            // infoLabel
+            // 
+            this.infoLabel.AutoSize = true;
+            this.infoLabel.Location = new System.Drawing.Point(528, 278);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(40, 13);
+            this.infoLabel.TabIndex = 2;
+            this.infoLabel.Text = "Match:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(862, 515);
+            this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.getFENBtn);
             this.Controls.Add(this.logTextBox);
             this.Name = "MainForm";
@@ -68,6 +79,7 @@
 
         private System.Windows.Forms.TextBox logTextBox;
         private System.Windows.Forms.Button getFENBtn;
+        private System.Windows.Forms.Label infoLabel;
     }
 }
 

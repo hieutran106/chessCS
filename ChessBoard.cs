@@ -19,7 +19,24 @@ namespace ChessCS
          * King = K/k
          *  
          */
+        public static bool BLACK = false;
+        public static bool WHITE = true;
 
+        private bool activeColor;
+        public bool ActiveColor
+        {
+            get {
+                return activeColor;
+            }
+        }
+        private int fullMove;
+        public int Fullmove
+        {
+            get
+            {
+                return fullMove;
+            }
+        }
         public char[,] Board { get; set; }
         public ChessBoard()
         {
@@ -32,6 +49,8 @@ namespace ChessCS
             //FEN for starting position
             string startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w";
             Load(startingPosition);
+            activeColor = WHITE;
+            fullMove = 0;
         }
         //Returns the FEN string for the current board
         public string GetFEN()
@@ -66,7 +85,10 @@ namespace ChessCS
         }
         public void Load(string fen)
         {
-            string piecePlacement = fen.Substring(0, fen.IndexOf(' '));
+            string[] block = fen.Split(' ');
+
+            //process piece placement
+            string piecePlacement = block[0];
             Console.WriteLine(piecePlacement);
             string[] tokens = piecePlacement.Split('/');
             if (tokens.Length==8)
@@ -98,8 +120,13 @@ namespace ChessCS
                 }
             } else
             {
-                Console.WriteLine("Invalid FEN notation");
+                Console.WriteLine("Invalid FEN notation, reset the board");
             }
+            //active color and full move
+            string activeColor_str = block[1];
+            activeColor = (activeColor_str[0] == 'w') ? WHITE : BLACK;
+            //full move
+            int.TryParse(block[block.Length-1], out fullMove);
         }
         //Put a piece 
         public void Put(char p,string position)
@@ -127,23 +154,15 @@ namespace ChessCS
             Move move = new ChessCS.Move(src_x, src_y, des_x, des_y, this);
             return move;
         }
-        public bool CanMakeMove(int x,int y, bool color)
-        {
-            if (IsCellClear(x, y) || CanCapture(x, y, color))
-                return true;
-            else return false;
-        }
+       
         public bool CanCapture(int x,int y, bool color)
         {
-            if ((color == ChessPiece.WHITE && char.IsLower(Board[x, y])) //IsLower --> black
-                || (color == ChessPiece.BLACK && char.IsUpper(Board[x, y]))) //IsUpper --> white
+            if ((color == WHITE && char.IsLower(Board[x, y])) //IsLower --> black
+                || (color == BLACK && char.IsUpper(Board[x, y]))) //IsUpper --> white
                 return true;
             else return false;
         }
-        public bool IsCellClear(int x,int y)
-        {
-            return Board[x, y] == '.';
-        }
+       
        
         public List<Move> possibleMoves()
         {

@@ -26,6 +26,7 @@ namespace ChessCS
             set
             {
                 chessBoard = value;
+                infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor?"white":"black")} fullMove:{chessBoard.Fullmove}";
                 for (int i = 0; i < 8; i++)
                     for (int j = 0; j < 8; j++)
                         boardGUI[i, j].Piece = chessBoard.Board[i, j];
