@@ -17,14 +17,33 @@ namespace ChessCS
         public const int SIZE = 60;
         public int X { set; get; }
         public int Y { set; get; }
-        private bool isHightlight;
-        public bool IsHightlight { get { return isHightlight; } set {
-                isHightlight = value;
+        private bool isHighlight;
+        public bool IsHighlight { get { return isHighlight; } set {
+                isHighlight = value;
                 this.Invalidate();
-                Console.WriteLine($"Hightlight [{X},{Y}]");
+                if (isHighlight)
+                {
+                    Console.WriteLine($"Hightlight [{X},{Y}]");
+                } else
+                {
+                    Console.WriteLine($"Remove hightlight [{X},{Y}]");
+                }
+               
             } }
-        
 
+        private bool showCoordinate;
+        public bool ShowCoordinate
+        {
+            get
+            {
+                return showCoordinate;
+            }
+            set
+            {
+                showCoordinate = value;
+                this.Invalidate();
+            }
+        }
         private char piece;
         public char Piece {
             get { return piece; } set {
@@ -45,9 +64,10 @@ namespace ChessCS
         {
             X = x;
             Y = y;
+            showCoordinate = false;
             piece = '.';
             this.Size = new Size(SIZE, SIZE);
-            this.Location = new Point(y * SIZE, x * SIZE);
+            this.Location = new Point(y * SIZE, 30+x * SIZE);
             this.BackColor = ((x + y) % 2 == 0) ? whiteColor : darkColor;
             SizeMode = PictureBoxSizeMode.StretchImage;
 
@@ -56,15 +76,17 @@ namespace ChessCS
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            if (IsHightlight)
+            if (IsHighlight)
             {
                 ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle, Color.Red, ButtonBorderStyle.Solid);
             }
-            using (Font myFont = new Font("Arial", 10))
+            if (showCoordinate)
             {
-                e.Graphics.DrawString($"[{X},{Y}]", myFont, Brushes.Red, new Point(2, 2));
+                using (Font myFont = new Font("Arial", 10))
+                {
+                    e.Graphics.DrawString($"[{X},{Y}]", myFont, Brushes.Red, new Point(2, 2));
+                }
             }
-
         }
         
     }

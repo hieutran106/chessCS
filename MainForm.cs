@@ -76,15 +76,15 @@ namespace ChessCS
             if (e.Button == MouseButtons.Left)
             {
                 SquareBox p = (SquareBox)sender;
+                
                 if (chessBoard.Board[p.X, p.Y] != '.' && isSelected == false) //Click on a chess piece
-                {
-                    
+                {                   
                     isSelected = true;
                     x_select = p.X;
                     y_select = p.Y;
                     Console.WriteLine($"Selected {chessBoard.Board[x_select, y_select]} at [{p.X},{p.Y}]");
                     //show border
-                    boardGUI[x_select, y_select].IsHightlight = true;
+                    boardGUI[x_select, y_select].IsHighlight = true;
                     //show border for possible move
                     char piece = char.ToUpper(chessBoard.Board[x_select, y_select]);
                     switch (piece)
@@ -111,13 +111,12 @@ namespace ChessCS
                             break;
                     }
                     if (possibleMoves != null)
-                    {
-                        
+                    {                       
                         foreach (Move move in possibleMoves)
                         {
-                            int x_des = move.Des_X;
-                            int y_des = move.Des_Y;                            
-                            boardGUI[x_des, y_des].IsHightlight = true;
+                            int x_highlight = move.X_Des;
+                            int y_highlight = move.Y_Des;                         
+                            boardGUI[x_highlight, y_highlight].IsHighlight = true;
                         }
                     }
 
@@ -125,24 +124,26 @@ namespace ChessCS
                 }
                 else if (isSelected == true)
                 {
-                    Console.WriteLine($"De_select at [{x_select},{y_select}]");
-                    isSelected = false;
-                    boardGUI[x_select, y_select].IsHightlight = false;
-                    x_select = -1;
-                    y_select = -1;
-                    
+                    Console.WriteLine($"De_select at [{p.X},{p.Y}]");                     
                     //remove hightlight in possible move
                     if (possibleMoves != null)
                     {
                         foreach (Move move in possibleMoves)
                         {
-                            int x_des = move.Des_X;
-                            int y_des = move.Des_Y;
-                            boardGUI[x_des, y_des].IsHightlight = false;
+                            int x_highlight = move.X_Des;
+                            int y_highlight = move.Y_Des;
+                            boardGUI[x_highlight, y_highlight].IsHighlight = false;
+                            if (p.X == x_highlight && p.Y == y_highlight)
+                            {
+                                Console.WriteLine($"Make move to [{p.X},{p.Y}]");
+                            }
                         }
                         possibleMoves = null;
                     }
-
+                    isSelected = false;
+                    boardGUI[x_select, y_select].IsHighlight = false;
+                    x_select = -1;
+                    y_select = -1;
                 }
             }
         }
@@ -173,6 +174,14 @@ namespace ChessCS
         private void getFENBtn_Click(object sender, EventArgs e)
         {
             logTextBox.AppendText(chessBoard.GetFEN());
+        }
+
+        private void coordinateToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            bool isChecked = coordinateToolStripMenuItem.Checked;
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
+                    boardGUI[i, j].ShowCoordinate = isChecked;
         }
 
         private void RemovePieceItem_Click(object sender, EventArgs e)

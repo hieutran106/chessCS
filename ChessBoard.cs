@@ -154,7 +154,27 @@ namespace ChessCS
             Move move = new ChessCS.Move(src_x, src_y, des_x, des_y, this);
             return move;
         }
-       
+        public void MakeMove(Move move)
+        {
+            //Update board data
+            Board[move.X_Src, move.Y_Src] = '.';
+            Board[move.X_Des, move.Y_Des] = move.Piece;
+            if (move.PawnPromotion)
+            {
+                if (activeColor == WHITE)
+                    Board[move.X_Des, move.Y_Des] = 'Q';
+                else Board[move.X_Des, move.Y_Des] = 'q';
+            }
+            //update active color and full move
+            if (activeColor==WHITE)
+            {
+                activeColor = BLACK;
+            } else
+            {
+                fullMove++;
+                activeColor = WHITE;
+            }
+        }
         public bool CanCapture(int x,int y, bool color)
         {
             if ((color == WHITE && char.IsLower(Board[x, y])) //IsLower --> black

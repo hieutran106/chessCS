@@ -8,23 +8,22 @@ namespace ChessCS
 {
     public class Move
     {
-        public int Des_X { get; set; }
-        public int Des_Y { get; set; }
-        public int Src_X { get; set; }
-        public int Src_Y { get; set; }
-        public bool IsCapture { get; private set; }
+        public int X_Des { get; set; }
+        public int Y_Des { get; set; }
+        public int X_Src { get; set; }
+        public int Y_Src { get; set; }
+        public char Piece { get; private set; }
+        public char Capture { get; private set; }
         public bool PawnPromotion { get; set; }
-        public Move(int src_x, int src_y, int des_x, int des_y, ChessBoard chessBoard)
+        public Move(int x_src, int y_src, int x_des, int y_des, ChessBoard chessBoard)
         {
-            Src_X = src_x;
-            Src_Y = src_y;
-            Des_X = des_x;
-            Des_Y = des_y;
-            if (chessBoard.Board[des_x, des_y] == '.')
-            {
-                IsCapture = true;
-            }
-            else IsCapture = false;
+            X_Src = x_src;
+            Y_Src = y_src;
+            X_Des = x_des;
+            Y_Des = y_des;
+            Piece = chessBoard.Board[x_src, y_src];
+            Capture = chessBoard.Board[x_des, y_des];
+            PawnPromotion = false;
         }
 
         public static string PositionFromCoordinate(int x, int y)
@@ -38,19 +37,32 @@ namespace ChessCS
         public override string ToString()
         {
             StringBuilder move = new StringBuilder(40);
-            move.Append(PositionFromCoordinate(Src_X, Src_Y));
-            if (IsCapture)
+            move.Append($"{Piece}: [{X_Src},{Y_Src}] - [{X_Des},{Y_Des}]");
+            if (Capture=='.')
             {
-                move.Append(" -x");
+                move.Append(" --");
+            } else
+            {
+                move.Append($" -{Capture}");
             }
-            else move.Append(" --");
-            move.Append(PositionFromCoordinate(Des_X, Des_Y));
             if (PawnPromotion)
             {
-                move.Append("=Q");
+                move.Append(" =Q");
             }
-            move.Append($" ([{Src_X},{Src_Y}] - [{Des_X},{Des_Y}])");
+            else move.Append(" --");
             return move.ToString();
+        }
+        public bool Equals(Move other)
+        {
+            if (X_Src == other.X_Src &&
+                Y_Src == other.Y_Src &&
+                X_Des == other.X_Des &&
+                Y_Des == other.Y_Des &&
+                Piece == other.Piece &&
+                Capture == other.Capture &&
+                PawnPromotion == other.PawnPromotion)
+                return true;
+            else return false;
         }
     }
 }
