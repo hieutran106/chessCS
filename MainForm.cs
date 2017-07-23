@@ -136,6 +136,7 @@ namespace ChessCS
                             if (p.X == x_highlight && p.Y == y_highlight)
                             {
                                 Console.WriteLine($"Make move to [{p.X},{p.Y}]");
+                                MakeMove(x_select, y_select, p.X, p.Y);
                             }
                         }
                         possibleMoves = null;
@@ -146,6 +147,15 @@ namespace ChessCS
                     y_select = -1;
                 }
             }
+        }
+        public void MakeMove(int x_src,int y_src, int x_des,int y_des)
+        {
+            Move move = chessBoard.GetMove(x_src, y_src, x_des, y_des);
+            chessBoard.MakeMove(move);
+
+            //Update GUI
+            boardGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
+            boardGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
         }
         private void AddPieceItem_Click(object sender, EventArgs e)
         {

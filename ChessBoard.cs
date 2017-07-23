@@ -175,6 +175,21 @@ namespace ChessCS
                 activeColor = WHITE;
             }
         }
+        public void UndoMove(Move move)
+        {
+            //Update board data
+            Board[move.X_Src, move.Y_Src] = move.Piece;
+            Board[move.X_Des, move.Y_Des] = move.Capture;
+            //update active color and full move
+            if (activeColor==BLACK)
+            {
+                activeColor = WHITE;
+            } else
+            {
+                activeColor = BLACK;
+                fullMove--;
+            }
+        }
         public bool CanCapture(int x,int y, bool color)
         {
             if ((color == WHITE && char.IsLower(Board[x, y])) //IsLower --> black
