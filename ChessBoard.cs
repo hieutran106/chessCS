@@ -22,6 +22,7 @@ namespace ChessCS
         public static bool BLACK = false;
         public static bool WHITE = true;
 
+
         private bool activeColor;
         public bool ActiveColor
         {

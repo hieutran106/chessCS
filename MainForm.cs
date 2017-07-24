@@ -71,6 +71,36 @@ namespace ChessCS
             chessBoard.Board[x, y] = piece;
             boardGUI[x, y].Piece = piece;
         }
+        private List<Move> PossibleMove(int x,int y)
+        {
+            List<Move> moves = new List<Move>();
+            char piece = char.ToUpper(chessBoard.Board[x_select, y_select]);
+            switch (piece)
+            {
+                case 'P':
+                    moves = Pawn.generateMove(x_select, y_select, chessBoard);
+                    break;
+                case 'R':
+                    moves = Rook.generateMove(x_select, y_select, chessBoard);
+                    break;
+                case 'N':
+                    moves = Knight.generateMove(x_select, y_select, chessBoard);
+                    break;
+                case 'B':
+                    moves = Bishop.generateMove(x_select, y_select, chessBoard);
+                    break;
+                case 'Q':
+                    moves = Queen.generateMove(x_select, y_select, chessBoard);
+                    break;
+                case 'K':
+                    moves = King.generateMove(x_select, y_select, chessBoard);
+                    break;
+                default:
+                    break;
+            }
+            return moves;
+
+        }
         private void SquareBox_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -78,49 +108,31 @@ namespace ChessCS
                 SquareBox p = (SquareBox)sender;
                 
                 if (chessBoard.Board[p.X, p.Y] != '.' && isSelected == false) //Click on a chess piece
-                {                   
-                    isSelected = true;
-                    x_select = p.X;
-                    y_select = p.Y;
-                    Console.WriteLine($"Selected {chessBoard.Board[x_select, y_select]} at [{p.X},{p.Y}]");
-                    //show border
-                    boardGUI[x_select, y_select].IsHighlight = true;
-                    //show border for possible move
-                    char piece = char.ToUpper(chessBoard.Board[x_select, y_select]);
-                    switch (piece)
+                {
+                    bool clickColor = char.IsUpper(chessBoard.Board[p.X, p.Y]);
+                    if (clickColor == chessBoard.ActiveColor)
                     {
-                        case 'P':
-                            possibleMoves = Pawn.generateMove(x_select, y_select, chessBoard);
-                            break;
-                        case 'R':
-                            possibleMoves = Rook.generateMove(x_select, y_select, chessBoard);
-                            break;
-                        case 'N':
-                            possibleMoves = Knight.generateMove(x_select, y_select, chessBoard);
-                            break;
-                        case 'B':
-                            possibleMoves = Bishop.generateMove(x_select, y_select, chessBoard);
-                            break;
-                        case 'Q':
-                            possibleMoves = Queen.generateMove(x_select, y_select, chessBoard);
-                            break;
-                        case 'K':
-                            possibleMoves = King.generateMove(x_select, y_select, chessBoard);
-                            break;
-                        default:
-                            break;
-                    }
-                    if (possibleMoves != null)
-                    {                       
-                        foreach (Move move in possibleMoves)
+                        isSelected = true;
+                        x_select = p.X;
+                        y_select = p.Y;
+                        Console.WriteLine($"Selected {chessBoard.Board[x_select, y_select]} at [{p.X},{p.Y}]");
+                        //show border
+                        boardGUI[x_select, y_select].IsHighlight = true;
+                        //show border for possible move
+                        possibleMoves = PossibleMove(x_select, y_select);
+                        if (possibleMoves != null)
                         {
-                            int x_highlight = move.X_Des;
-                            int y_highlight = move.Y_Des;                         
-                            boardGUI[x_highlight, y_highlight].IsHighlight = true;
+                            foreach (Move move in possibleMoves)
+                            {
+                                int x_highlight = move.X_Des;
+                                int y_highlight = move.Y_Des;
+                                boardGUI[x_highlight, y_highlight].IsHighlight = true;
+                            }
                         }
-                    }
-
-
+                    } else
+                    {
+                        Console.WriteLine("Wrong active color");
+                    }                 
                 }
                 else if (isSelected == true)
                 {
@@ -156,7 +168,10 @@ namespace ChessCS
             //Update GUI
             boardGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
             boardGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
+            //Update info
+            infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.Fullmove}";
         }
+        //Context Menu
         private void AddPieceItem_Click(object sender, EventArgs e)
         {
             MenuItem menuItem = sender as MenuItem;
