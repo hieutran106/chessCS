@@ -18,6 +18,9 @@ namespace ChessCS
         private bool isSelected;
         private int x_select, y_select;
         private List<Move> possibleMoves;
+        //history
+        private Stack<Move> moveHistory;
+
         public ChessBoard ChessBoard {
             get
             {
@@ -62,8 +65,9 @@ namespace ChessCS
 
                     this.Controls.Add(squareBox);
                 }
-                    
 
+            //move history
+            moveHistory = new Stack<Move>();                  
         }
         //Put a piece
         public void Put_Piece(int x,int y, char piece)
@@ -164,12 +168,23 @@ namespace ChessCS
         {
             Move move = chessBoard.GetMove(x_src, y_src, x_des, y_des);
             chessBoard.MakeMove(move);
+            moveHistory.Push(move);
 
             //Update GUI
             boardGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
             boardGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
             //Update info
             infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.Fullmove}";
+            //
+            if (chessBoard.ActiveColor==ChessBoard.BLACK)
+            {
+                moveHistoryTextBox.AppendText($"\n{chessBoard.Fullmove}. {move}");
+            } else
+            {
+                moveHistoryTextBox.AppendText($"  {move}");
+            }
+            
+
         }
         //Context Menu
         private void AddPieceItem_Click(object sender, EventArgs e)
@@ -207,6 +222,45 @@ namespace ChessCS
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 8; j++)
                     boardGUI[i, j].ShowCoordinate = isChecked;
+        }
+
+        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            chessBoard.Reset();
+            chessBoard.Load("rnbqk2r/ppp1bppp/4pn2/3p4/3P4/N1P1B3/PP2PPPP/R2QKBNR w KQkq d6 0 5");
+            //reset
+            isSelected=false;
+            x_select = -1;
+            y_select = -1;
+            possibleMoves=null;
+
+    }
+
+        private void backBtn_Click(object sender, EventArgs e)
+        {
+            Move move = moveHistory.Pop();
+            chessBoard.UndoMove(move);
+
+            //Update GUI
+            boardGUI[move.X_Src, move.Y_Src].Piece = chessBoard.Board[move.X_Src, move.Y_Src];
+            boardGUI[move.X_Des, move.Y_Des].Piece = chessBoard.Board[move.X_Des, move.Y_Des];
+            //Update info
+            infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.Fullmove}";
+            //remove text in rich text box
+            StringBuilder text = new StringBuilder(moveHistoryTextBox.Text);
+            
+            if (chessBoard.ActiveColor == ChessBoard.BLACK)
+            {
+                text.Remove(text.Length - 24, 24);
+                moveHistoryTextBox.Text = text.ToString();
+                //moveHistoryTextBox.AppendText($"\n{chessBoard.Fullmove}. {move}");
+            }
+            else
+            {
+                text.Remove(text.Length - 22, 22);
+                moveHistoryTextBox.Text = text.ToString();
+                //moveHistoryTextBox.AppendText($"  {move}");
+            }
         }
 
         private void RemovePieceItem_Click(object sender, EventArgs e)

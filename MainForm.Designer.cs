@@ -32,12 +32,14 @@
             this.getFENBtn = new System.Windows.Forms.Button();
             this.infoLabel = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coordinateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.moveHistoryTextBox = new System.Windows.Forms.RichTextBox();
+            this.backBtn = new System.Windows.Forms.Button();
+            this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +65,7 @@
             // infoLabel
             // 
             this.infoLabel.AutoSize = true;
-            this.infoLabel.Location = new System.Drawing.Point(6, 164);
+            this.infoLabel.Location = new System.Drawing.Point(6, 197);
             this.infoLabel.Name = "infoLabel";
             this.infoLabel.Size = new System.Drawing.Size(40, 13);
             this.infoLabel.TabIndex = 2;
@@ -81,6 +83,14 @@
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newGameToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
             // displayToolStripMenuItem
             // 
             this.displayToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -89,11 +99,13 @@
             this.displayToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.displayToolStripMenuItem.Text = "Display";
             // 
-            // fileToolStripMenuItem
+            // coordinateToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.coordinateToolStripMenuItem.CheckOnClick = true;
+            this.coordinateToolStripMenuItem.Name = "coordinateToolStripMenuItem";
+            this.coordinateToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.coordinateToolStripMenuItem.Text = "Coordinate";
+            this.coordinateToolStripMenuItem.CheckedChanged += new System.EventHandler(this.coordinateToolStripMenuItem_CheckedChanged);
             // 
             // aboutToolStripMenuItem
             // 
@@ -101,32 +113,42 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             // 
-            // coordinateToolStripMenuItem
-            // 
-            this.coordinateToolStripMenuItem.CheckOnClick = true;
-            this.coordinateToolStripMenuItem.Name = "coordinateToolStripMenuItem";
-            this.coordinateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.coordinateToolStripMenuItem.Text = "Coordinate";
-            this.coordinateToolStripMenuItem.CheckedChanged += new System.EventHandler(this.coordinateToolStripMenuItem_CheckedChanged);
-            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.richTextBox1);
+            this.groupBox1.Controls.Add(this.backBtn);
+            this.groupBox1.Controls.Add(this.moveHistoryTextBox);
             this.groupBox1.Controls.Add(this.infoLabel);
             this.groupBox1.Location = new System.Drawing.Point(531, 189);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(319, 186);
+            this.groupBox1.Size = new System.Drawing.Size(319, 219);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Moves";
             // 
-            // richTextBox1
+            // moveHistoryTextBox
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(7, 20);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(306, 134);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.moveHistoryTextBox.Location = new System.Drawing.Point(7, 20);
+            this.moveHistoryTextBox.Name = "moveHistoryTextBox";
+            this.moveHistoryTextBox.Size = new System.Drawing.Size(306, 134);
+            this.moveHistoryTextBox.TabIndex = 0;
+            this.moveHistoryTextBox.Text = "";
+            // 
+            // backBtn
+            // 
+            this.backBtn.Location = new System.Drawing.Point(7, 161);
+            this.backBtn.Name = "backBtn";
+            this.backBtn.Size = new System.Drawing.Size(75, 23);
+            this.backBtn.TabIndex = 3;
+            this.backBtn.Text = "Back";
+            this.backBtn.UseVisualStyleBackColor = true;
+            this.backBtn.Click += new System.EventHandler(this.backBtn_Click);
+            // 
+            // newGameToolStripMenuItem
+            // 
+            this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
+            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newGameToolStripMenuItem.Text = "New Game";
+            this.newGameToolStripMenuItem.Click += new System.EventHandler(this.newGameToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -160,7 +182,9 @@
         private System.Windows.Forms.ToolStripMenuItem coordinateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox moveHistoryTextBox;
+        private System.Windows.Forms.Button backBtn;
+        private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
     }
 }
 

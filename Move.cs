@@ -37,19 +37,20 @@ namespace ChessCS
         public override string ToString()
         {
             StringBuilder move = new StringBuilder(40);
-            move.Append($"{Piece}: [{X_Src},{Y_Src}] - [{X_Des},{Y_Des}]");
+            move.Append($"{Piece}:[{X_Src},{Y_Src}]-[{X_Des},{Y_Des}]");
             if (Capture=='.')
             {
                 move.Append(" --");
             } else
             {
-                move.Append($" -{Capture}");
+                move.Append($" x{Capture}");
             }
             if (PawnPromotion)
             {
-                move.Append(" =Q");
+                move.Append("=Q");
             }
-            else move.Append(" --");
+            else move.Append("  ");
+            Console.WriteLine($"Move length: {move.ToString().Length}");
             return move.ToString();
         }
         public bool Equals(Move other)
