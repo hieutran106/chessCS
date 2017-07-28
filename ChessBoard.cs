@@ -51,7 +51,7 @@ namespace ChessCS
             string startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w";
             Load(startingPosition);
             activeColor = WHITE;
-            fullMove = 0;
+            fullMove = 1;
         }
         //Returns the FEN string for the current board
         public string GetFEN()

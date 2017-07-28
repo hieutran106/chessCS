@@ -52,6 +52,7 @@
     <Compile Include="AddPieceForm.Designer.cs">
       <DependentUpon>AddPieceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChessAI.cs" />
     <Compile Include="ChessBoard.cs" />
     <Compile Include="ChessPieces\Bishop.cs" />
     <Compile Include="ChessPieces\ChessPiece.cs" />

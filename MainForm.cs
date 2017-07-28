@@ -161,6 +161,11 @@ namespace ChessCS
                     boardGUI[x_select, y_select].IsHighlight = false;
                     x_select = -1;
                     y_select = -1;
+
+                    //computer move
+                    Move computerMove = ChessAI.getMove(chessBoard);
+                    MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
+
                 }
             }
         }
