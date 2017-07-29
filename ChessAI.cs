@@ -8,6 +8,11 @@ namespace ChessCS
 {
     class ChessAI
     {
+        bool MaxPlayer = true;
+        public ChessAI()
+        {
+
+        }
         public static Move getMove(ChessBoard board)
         {
             if (board.Fullmove==1 && board.ActiveColor==ChessBoard.BLACK)

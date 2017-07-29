@@ -39,6 +39,7 @@ namespace ChessCS
             }
         }
         public char[,] Board { get; set; }
+        static int globalDepth = 4;
         public ChessBoard()
         {
             Board = new char[8, 8];
@@ -200,9 +201,40 @@ namespace ChessCS
         }
        
        
-        public List<Move> possibleMoves()
+        public List<Move> PossibleMoves()
         {
-            return null;
+            List<Move> possibleMoves = new List<Move>();
+            for (int i=0;i<8;i++)
+                for (int j=0;j<8;j++)
+                {
+                    List<Move> pieceMoves=null;
+                    char piece = char.ToUpper(Board[i, j]);
+                    switch (piece)
+                    {
+                        case 'P':
+                            pieceMoves = Pawn.generateMove(i, j, this);
+                            break;
+                        case 'R':
+                            pieceMoves = Rook.generateMove(i, j, this);
+                            break;
+                        case 'N':
+                            pieceMoves = Knight.generateMove(i, j, this);
+                            break;
+                        case 'B':
+                            pieceMoves = Bishop.generateMove(i, j, this);
+                            break;
+                        case 'Q':
+                            pieceMoves = Queen.generateMove(i, j, this);
+                            break;
+                        case 'K':
+                            pieceMoves = King.generateMove(i, j, this);
+                            break;
+                        default:
+                            break;
+                    }
+                    possibleMoves.AddRange(pieceMoves);                   
+                }
+            return possibleMoves;
         }
         public void PrintBoard()
         {
@@ -218,6 +250,74 @@ namespace ChessCS
             }
             Console.WriteLine("   +------------------------+");
             Console.WriteLine("     a  b  c  d  e  f  g  h");
+        }
+        public MNResult alphaBeta(int depth, int beta, int alpha, Move move, int player)
+        {
+            List<Move> possibleMoves = PossibleMoves();
+            if (depth==0 || possibleMoves.Count==0)
+            {
+                //Negate the value
+                int sign = player * 2 - 1;
+                MNResult result = new MNResult(move, Rating() * sign);
+                return result;
+            }
+            //Prompt how many moves
+            Console.Write("How many moves are there: ");
+            int temp= int.Parse(Console.ReadLine());
+            for (int i=0;i< temp;i++)
+            {
+                Move testMove = new Move(0, 0, 0, 0, this);
+                possibleMoves.Add(testMove);
+            }
+            //sort later
+            foreach (Move eleMove in possibleMoves)
+            {
+                MakeMove(eleMove);
+                MNResult result = alphaBeta(depth - 1, beta, alpha, eleMove, player);
+                int value = result.Value;
+                UndoMove(eleMove);
+                if (player==0)
+                {
+                    if (value<=beta)
+                    {
+                        beta = value;
+                        if (depth==globalDepth)
+                        {
+                            move = result.Move;
+                        }
+                    }
+                } else
+                {
+                    if (value>alpha)
+                    {
+                        alpha = value;
+                        if (depth==globalDepth)
+                        {
+                            move = result.Move;
+                        }
+                    }
+                }
+                if (alpha>=beta)
+                {
+                    if (player == 0)
+                    {
+                        return new MNResult(move, beta);
+                    }
+                    else return new MNResult(move, alpha);
+                }
+                
+            }
+            if (player == 0)
+            {
+                return new MNResult(move, beta);
+            }
+            else return new MNResult(move, alpha);
+
+        }
+        public int Rating()
+        {
+            Console.Write("What is the score: ");
+            return int.Parse(Console.ReadLine());
         }
     }
 }
