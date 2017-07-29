@@ -251,32 +251,42 @@ namespace ChessCS
             Console.WriteLine("   +------------------------+");
             Console.WriteLine("     a  b  c  d  e  f  g  h");
         }
-        public MNResult alphaBeta(int depth, int beta, int alpha, Move move, int player)
+        public MNResult alphaBeta(int depth, int beta, int alpha, Move move, bool player)
         {
-            List<Move> possibleMoves = PossibleMoves();
+            //BLACK is max player
+
+            //List<Move> possibleMoves = PossibleMoves();
+            List<Move> possibleMoves = new List<Move>();
+            Move forTestMove = new Move(1, 4, 3, 4, this);
+            possibleMoves.Add(forTestMove);
+
             if (depth==0 || possibleMoves.Count==0)
             {
                 //Negate the value
-                int sign = player * 2 - 1;
-                MNResult result = new MNResult(move, Rating() * sign);
+                int sign = (player == BLACK) ? 1 : -1;
+                //MNResult result = new MNResult(move, Rating() * sign);
+                MNResult result = new MNResult(move, Rating());
                 return result;
             }
             //Prompt how many moves
+            possibleMoves.Remove(forTestMove);
             Console.Write("How many moves are there: ");
-            int temp= int.Parse(Console.ReadLine());
+            int temp= Convert.ToInt32(Console.ReadLine());
             for (int i=0;i< temp;i++)
             {
-                Move testMove = new Move(0, 0, 0, 0, this);
+                Move testMove = new Move(1, 4, 3, 4, this);
                 possibleMoves.Add(testMove);
             }
             //sort later
+            player = !player;
             foreach (Move eleMove in possibleMoves)
             {
                 MakeMove(eleMove);
                 MNResult result = alphaBeta(depth - 1, beta, alpha, eleMove, player);
                 int value = result.Value;
                 UndoMove(eleMove);
-                if (player==0)
+                //BLACK is Max Player
+                if (player==BLACK)
                 {
                     if (value<=beta)
                     {
@@ -299,7 +309,7 @@ namespace ChessCS
                 }
                 if (alpha>=beta)
                 {
-                    if (player == 0)
+                    if (player == BLACK)
                     {
                         return new MNResult(move, beta);
                     }
@@ -307,7 +317,7 @@ namespace ChessCS
                 }
                 
             }
-            if (player == 0)
+            if (player == BLACK)
             {
                 return new MNResult(move, beta);
             }
@@ -317,7 +327,7 @@ namespace ChessCS
         public int Rating()
         {
             Console.Write("What is the score: ");
-            return int.Parse(Console.ReadLine());
+            return Convert.ToInt32(Console.ReadLine());
         }
     }
 }

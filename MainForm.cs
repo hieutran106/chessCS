@@ -67,7 +67,8 @@ namespace ChessCS
                 }
 
             //move history
-            moveHistory = new Stack<Move>();                  
+            moveHistory = new Stack<Move>();
+                            
         }
         //Put a piece
         public void Put_Piece(int x,int y, char piece)

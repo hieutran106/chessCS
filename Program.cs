@@ -25,6 +25,8 @@ namespace ChessCS
             //create main form
             MainForm mainForm = new MainForm();
             mainForm.ChessBoard = cb;
+            //test alpha beta
+            Console.WriteLine(cb.alphaBeta(4, 1000000, -1000000, null, false));
             Application.Run(mainForm);
         }
     }
