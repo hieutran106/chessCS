@@ -99,7 +99,8 @@ namespace ChessCS
             int value = 0;
             //WHITE piece is uppercase
             bool isWhite = char.IsUpper(board[i, j]);
-            int absoluteValue = GetAbsoluteValue(board[i, j], isWhite, i, j);             
+            int absoluteValue = GetAbsoluteValue(board[i, j], isWhite, i, j);
+                         
             return (isWhite)?absoluteValue:-absoluteValue;
         }
         private static int GetAbsoluteValue(char piece, bool isWhite, int i,int j)

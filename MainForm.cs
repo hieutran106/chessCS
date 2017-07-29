@@ -164,7 +164,7 @@ namespace ChessCS
                     y_select = -1;
 
                     //computer move
-                    Move computerMove = ChessAI.getMove(chessBoard);
+                    Move computerMove = chessBoard.GetAIMove();
                     MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
 
                 }

@@ -232,7 +232,12 @@ namespace ChessCS
                         default:
                             break;
                     }
-                    possibleMoves.AddRange(pieceMoves);                   
+                    if (pieceMoves!=null)
+                    {
+                        //pieceMove is not generated if piece is '.'
+                        possibleMoves.AddRange(pieceMoves);
+                    }
+                                      
                 }
             return possibleMoves;
         }
@@ -325,7 +330,7 @@ namespace ChessCS
             else return new MNResult(move, alpha);
 
         }
-        public Move getMove()
+        public Move GetAIMove()
         {
             if (Fullmove == 1 && ActiveColor == ChessBoard.BLACK)
             {
