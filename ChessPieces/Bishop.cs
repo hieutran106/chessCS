@@ -22,7 +22,7 @@ namespace ChessCS.ChessPieces
                     {
                         int x_des = x + i * step;
                         int y_des = y + j * step;
-                        Console.WriteLine($"Bishop move candidate [{x_des},{y_des}]");
+                        //Console.WriteLine($"Bishop move candidate [{x_des},{y_des}]");
                         if (ChessBoard.IsValidCoordinate(x_des, y_des))
                         {
                             if (chessBoard.Board[x_des, y_des] == '.')

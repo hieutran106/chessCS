@@ -39,10 +39,12 @@ namespace ChessCS
             }
         }
         public char[,] Board { get; set; }
-        static int globalDepth = 4;
+        static int globalDepth = 2;
+        private Rating rating;
         public ChessBoard()
         {
             Board = new char[8, 8];
+            rating = new Rating();
         }
         
         //Reset the board
@@ -200,46 +202,67 @@ namespace ChessCS
             else return false;
         }
        
-       
-        public List<Move> PossibleMoves()
+        //All possible moves
+        public List<Move> PossibleMoves(bool color)
         {
             List<Move> possibleMoves = new List<Move>();
+            
             for (int i=0;i<8;i++)
                 for (int j=0;j<8;j++)
                 {
-                    List<Move> pieceMoves=null;
-                    char piece = char.ToUpper(Board[i, j]);
-                    switch (piece)
-                    {
-                        case 'P':
-                            pieceMoves = Pawn.generateMove(i, j, this);
-                            break;
-                        case 'R':
-                            pieceMoves = Rook.generateMove(i, j, this);
-                            break;
-                        case 'N':
-                            pieceMoves = Knight.generateMove(i, j, this);
-                            break;
-                        case 'B':
-                            pieceMoves = Bishop.generateMove(i, j, this);
-                            break;
-                        case 'Q':
-                            pieceMoves = Queen.generateMove(i, j, this);
-                            break;
-                        case 'K':
-                            pieceMoves = King.generateMove(i, j, this);
-                            break;
-                        default:
-                            break;
-                    }
-                    if (pieceMoves!=null)
+                    List<Move> pieceMoves = PieceMoves(Board[i, j], color, i, j);
+                    if (pieceMoves != null)
                     {
                         //pieceMove is not generated if piece is '.'
                         possibleMoves.AddRange(pieceMoves);
                     }
-                                      
                 }
+            
             return possibleMoves;
+        }
+        private List<Move> PieceMoves(char piece, bool color,int i, int j)
+        {
+            List<Move> pieceMoves = null;
+            if ((color==WHITE&&char.IsUpper(piece)) ||
+                (color==BLACK && char.IsLower(piece))) {
+                switch (piece)
+                {
+                    case 'P':
+                    case 'p':
+                        pieceMoves = Pawn.generateMove(i, j, this);
+                        Console.WriteLine($"Pawn move: {pieceMoves.Count}");
+                        break;
+                    case 'R':
+                    case 'r':
+                        pieceMoves = Rook.generateMove(i, j, this);
+                        Console.WriteLine($"Rook move: {pieceMoves.Count}");
+                        break;
+                    case 'N':
+                    case 'n':
+                        pieceMoves = Knight.generateMove(i, j, this);
+                        Console.WriteLine($"Knight move: {pieceMoves.Count}");
+                        break;
+                    case 'B':
+                    case 'b':
+                        pieceMoves = Bishop.generateMove(i, j, this);
+                        Console.WriteLine($"Bishop move: {pieceMoves.Count}");
+                        break;
+                    case 'Q':
+                    case 'q':
+                        pieceMoves = Queen.generateMove(i, j, this);
+                        Console.WriteLine($"Queen move: {pieceMoves.Count}");
+                        break;
+                    case 'K':
+                    case 'k':
+                        pieceMoves = King.generateMove(i, j, this);
+                        Console.WriteLine($"King move: {pieceMoves.Count}");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return pieceMoves;
+            
         }
         public void PrintBoard()
         {
@@ -260,7 +283,7 @@ namespace ChessCS
         {
             //BLACK is max player
 
-            List<Move> possibleMoves = PossibleMoves();
+            List<Move> possibleMoves = PossibleMoves(player);
             //List<Move> possibleMoves = new List<Move>();
             //Move forTestMove = new Move(1, 4, 3, 4, this);
             //possibleMoves.Add(forTestMove);
@@ -269,8 +292,9 @@ namespace ChessCS
             {
                 //Negate the value
                 int sign = (player == BLACK) ? 1 : -1;
-                int evaluation = Rating.EvaluateBoard(Board);
-                MNResult result = new MNResult(move, evaluation * sign);
+                int evaluation = rating.EvaluateBoard(Board);
+                MNResult result = new MNResult(move, evaluation);
+                //MNResult result = new MNResult(move, evaluation * sign);
                 //MNResult result = new MNResult(move, Rating());
                 return result;
             }
@@ -344,7 +368,7 @@ namespace ChessCS
             }
             else
             {
-                MNResult result= AlphaBeta(4, 1000000, -1000000, null, false);
+                MNResult result= AlphaBeta(2, 1000000, -1000000, null, false);
                 Console.WriteLine("Best move:" + result.Move);
                 return result.Move;
             }

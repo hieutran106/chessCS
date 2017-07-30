@@ -21,7 +21,7 @@ namespace ChessCS.ChessPieces
                 {
                     int x_des = x + delta[i,0] * step;
                     int y_des = y + delta[i,1] * step;
-                    Console.WriteLine($"Rook move candidate [{x_des},{y_des}]");
+                    //Console.WriteLine($"Rook move candidate [{x_des},{y_des}]");
                     if (ChessBoard.IsValidCoordinate(x_des, y_des))
                     {
                         if (chessBoard.Board[x_des, y_des] == '.')
