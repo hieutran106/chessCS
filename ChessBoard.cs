@@ -39,7 +39,7 @@ namespace ChessCS
             }
         }
         public char[,] Board { get; set; }
-        static int globalDepth = 2;
+        static int globalDepth = 1;
         private Rating rating;
         public ChessBoard()
         {
@@ -282,31 +282,25 @@ namespace ChessCS
         public MNResult AlphaBeta(int depth, int beta, int alpha, Move move, bool player)
         {
             //BLACK is max player
-
-            List<Move> possibleMoves = PossibleMoves(player);
-            //List<Move> possibleMoves = new List<Move>();
-            //Move forTestMove = new Move(1, 4, 3, 4, this);
-            //possibleMoves.Add(forTestMove);
-
-            if (depth==0 || possibleMoves.Count==0)
+            if (depth==0)
             {
                 //Negate the value
                 int sign = (player == BLACK) ? 1 : -1;
                 int evaluation = rating.EvaluateBoard(Board);
                 MNResult result = new MNResult(move, evaluation);
-                //MNResult result = new MNResult(move, evaluation * sign);
-                //MNResult result = new MNResult(move, Rating());
+                Console.WriteLine($"Move: {result.Move}, value={result.Value}");
                 return result;
             }
-            //Prompt how many moves
-            //possibleMoves.Remove(forTestMove);
-            //Console.Write("How many moves are there: ");
-            //int temp= Convert.ToInt32(Console.ReadLine());
-            //for (int i=0;i< temp;i++)
-            //{
-            //    Move testMove = new Move(1, 4, 3, 4, this);
-            //    possibleMoves.Add(testMove);
-            //}
+            List<Move> possibleMoves = PossibleMoves(player);
+            if (possibleMoves.Count==0)
+            {
+                //Negate the value
+                int sign = (player == BLACK) ? 1 : -1;
+                int evaluation = rating.EvaluateBoard(Board);
+                MNResult result = new MNResult(move, evaluation);               
+                return result;
+            }
+
             //sort later
             player = !player;
             foreach (Move eleMove in possibleMoves)
@@ -314,6 +308,7 @@ namespace ChessCS
                 MakeMove(eleMove);
                 MNResult result = AlphaBeta(depth - 1, beta, alpha, eleMove, player);
                 int value = result.Value;
+                
                 UndoMove(eleMove);
                 //BLACK is Max Player
                 if (player==BLACK)
@@ -368,15 +363,10 @@ namespace ChessCS
             }
             else
             {
-                MNResult result= AlphaBeta(2, 1000000, -1000000, null, false);
+                MNResult result= AlphaBeta(1, 1000000, -1000000, null, false);
                 Console.WriteLine("Best move:" + result.Move);
                 return result.Move;
             }
         }
-        //public int Rating()
-        //{
-        //    Console.Write("What is the score: ");
-        //    return Convert.ToInt32(Console.ReadLine());
-        //}
     }
 }

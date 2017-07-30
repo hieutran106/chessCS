@@ -21,7 +21,7 @@ namespace ChessCS.ChessPieces
             {
                 Move move = chessBoard.GetMove(x, y, x+dx, y);
                 //promotion
-                if ((color==BLACK && x==6)|| (!color==WHITE && x==1)) {
+                if ((color==BLACK && x==6)|| (color==WHITE && x==1)) {
                     move.PawnPromotion = true;
                 }
                 moves.Add(move);

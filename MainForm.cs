@@ -141,7 +141,7 @@ namespace ChessCS
                 }
                 else if (isSelected == true)
                 {
-                    Console.WriteLine($"De_select at [{p.X},{p.Y}]");                     
+                    //Console.WriteLine($"De_select at [{p.X},{p.Y}]");                     
                     //remove hightlight in possible move
                     if (possibleMoves != null)
                     {
@@ -152,7 +152,7 @@ namespace ChessCS
                             boardGUI[x_highlight, y_highlight].IsHighlight = false;
                             if (p.X == x_highlight && p.Y == y_highlight)
                             {
-                                Console.WriteLine($"Make move to [{p.X},{p.Y}]");
+                                //Console.WriteLine($"Make move to [{p.X},{p.Y}]");
                                 MakeMove(x_select, y_select, p.X, p.Y);
                             }
                         }

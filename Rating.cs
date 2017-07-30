@@ -117,22 +117,28 @@ namespace ChessCS
             switch (piece)
             {
                 case 'P':
-                    absoluteValue = 100 +(isWhite?pawnEvalWhite[i,j]:pawnEvalBlack[i,j]);
+                    //absoluteValue = 100 +(isWhite?pawnEvalWhite[i,j]:pawnEvalBlack[i,j]);
+                    absoluteValue = 100;
                     break;
                 case 'R':
-                    absoluteValue = 500 + (isWhite?rookEvalWhite[i,j]:rookEvalBlack[i,j]);
+                    //absoluteValue = 500 + (isWhite?rookEvalWhite[i,j]:rookEvalBlack[i,j]);
+                    absoluteValue = 500;
                     break;
                 case 'N':
-                    absoluteValue = 300 + (isWhite?knightEvalWhite[i,j]:knightEvalBlack[i,j]);
+                    //absoluteValue = 300 + (isWhite?knightEvalWhite[i,j]:knightEvalBlack[i,j]);
+                    absoluteValue = 300 + (isWhite ? knightEvalWhite[i, j] : knightEvalBlack[i, j]);
                     break;
                 case 'B':
-                    absoluteValue = 300 + (isWhite?bishopEvalWhite[i,j]:bishopEvalBlack[i,j]);
+                    //absoluteValue = 300 + (isWhite?bishopEvalWhite[i,j]:bishopEvalBlack[i,j]);
+                    absoluteValue = 300;
                     break;
                 case 'Q':
-                    absoluteValue = 900 + (isWhite?queenEvalWhite[i,j]:queenEvalBlack[i,j]);
+                    //absoluteValue = 900 + (isWhite?queenEvalWhite[i,j]:queenEvalBlack[i,j]);
+                    absoluteValue = 900;
                     break;
                 case 'K':
-                    absoluteValue = 9000 + (isWhite?kingEvalWhite[i,j]:kingEvalBlack[i,j]);
+                   // absoluteValue = 9000 + (isWhite?kingEvalWhite[i,j]:kingEvalBlack[i,j]);
+                    absoluteValue = 9000;
                     break;
                 default:
                     break;

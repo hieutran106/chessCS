@@ -70,7 +70,7 @@ namespace ChessCS
             this.Location = new Point(y * SIZE, 30+x * SIZE);
             this.BackColor = ((x + y) % 2 == 0) ? whiteColor : darkColor;
             SizeMode = PictureBoxSizeMode.StretchImage;
-
+            ShowCoordinate = true;
             
         }
         protected override void OnPaint(PaintEventArgs e)
