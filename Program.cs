@@ -17,7 +17,7 @@ namespace ChessCS
             
             ChessBoard cb = new ChessBoard();
             cb.Reset();
-            //cb.Load("rnbqk2r/ppp1bppp/4pn2/3p4/3P4/N1P1B3/PP2PPPP/R2QKBNR w KQkq d6 0 5");
+            //cb.Load("8/8/p7/8/8/2n1P3/8/8 w 3");
 
             //Show main form
             Application.EnableVisualStyles();

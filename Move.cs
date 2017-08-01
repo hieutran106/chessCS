@@ -50,7 +50,6 @@ namespace ChessCS
                 move.Append("=Q");
             }
             else move.Append("  ");
-            Console.WriteLine($"Move length: {move.ToString().Length}");
             return move.ToString();
         }
         public bool Equals(Move other)

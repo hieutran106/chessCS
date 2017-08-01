@@ -39,7 +39,7 @@ namespace ChessCS
             }
         }
         public char[,] Board { get; set; }
-        static int globalDepth = 1;
+        static int globalDepth = 2;
         private Rating rating;
         public ChessBoard()
         {
@@ -285,19 +285,23 @@ namespace ChessCS
             if (depth==0)
             {
                 //Negate the value
-                int sign = (player == BLACK) ? 1 : -1;
+                int sign = (player == BLACK) ? -1 : 1;
                 int evaluation = rating.EvaluateBoard(Board);
-                MNResult result = new MNResult(move, evaluation);
-                Console.WriteLine($"Move: {result.Move}, value={result.Value}");
+                if (evaluation==300|| evaluation==-300)
+                {
+                    Console.WriteLine();
+                }
+                MNResult result = new MNResult(move, evaluation*sign);
+                Console.WriteLine($"Move: {result.Move}, value={result.Value}, depth={2-depth}");
                 return result;
             }
             List<Move> possibleMoves = PossibleMoves(player);
             if (possibleMoves.Count==0)
             {
                 //Negate the value
-                int sign = (player == BLACK) ? 1 : -1;
+                int sign = (player == BLACK) ? -1 : 1;
                 int evaluation = rating.EvaluateBoard(Board);
-                MNResult result = new MNResult(move, evaluation);               
+                MNResult result = new MNResult(move, evaluation*sign);               
                 return result;
             }
 
@@ -363,7 +367,7 @@ namespace ChessCS
             }
             else
             {
-                MNResult result= AlphaBeta(1, 1000000, -1000000, null, false);
+                MNResult result= AlphaBeta(2, 1000000, -1000000, null, false);
                 Console.WriteLine("Best move:" + result.Move);
                 return result.Move;
             }
