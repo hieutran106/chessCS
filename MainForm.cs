@@ -106,7 +106,7 @@ namespace ChessCS
             return moves;
 
         }
-        private void SquareBox_Click(object sender, MouseEventArgs e)
+        private async void SquareBox_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -164,9 +164,15 @@ namespace ChessCS
                     y_select = -1;
 
                     //computer move
-                    Move computerMove = chessBoard.GetAIMove();
-                    MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
+                    thinkLabel.Text = "Computer is thinking....";
+                    Task<Move> computerMoveTask = Task.Run(()=>chessBoard.GetAIMove());
 
+                    //wait for Task
+                    await computerMoveTask;
+                    Move computerMove = computerMoveTask.Result;
+                    thinkLabel.Text = "";
+                    //
+                    MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
                 }
             }
         }

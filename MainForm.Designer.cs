@@ -40,6 +40,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.backBtn = new System.Windows.Forms.Button();
             this.moveHistoryTextBox = new System.Windows.Forms.RichTextBox();
+            this.thinkLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -110,7 +111,7 @@
             // 
             this.coordinateToolStripMenuItem.CheckOnClick = true;
             this.coordinateToolStripMenuItem.Name = "coordinateToolStripMenuItem";
-            this.coordinateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.coordinateToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.coordinateToolStripMenuItem.Text = "Coordinate";
             this.coordinateToolStripMenuItem.CheckedChanged += new System.EventHandler(this.coordinateToolStripMenuItem_CheckedChanged);
             // 
@@ -122,12 +123,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.thinkLabel);
             this.groupBox1.Controls.Add(this.backBtn);
             this.groupBox1.Controls.Add(this.moveHistoryTextBox);
             this.groupBox1.Controls.Add(this.infoLabel);
             this.groupBox1.Location = new System.Drawing.Point(531, 189);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(319, 219);
+            this.groupBox1.Size = new System.Drawing.Size(319, 250);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Moves";
@@ -149,6 +151,14 @@
             this.moveHistoryTextBox.Size = new System.Drawing.Size(306, 134);
             this.moveHistoryTextBox.TabIndex = 0;
             this.moveHistoryTextBox.Text = "";
+            // 
+            // thinkLabel
+            // 
+            this.thinkLabel.AutoSize = true;
+            this.thinkLabel.Location = new System.Drawing.Point(9, 214);
+            this.thinkLabel.Name = "thinkLabel";
+            this.thinkLabel.Size = new System.Drawing.Size(0, 13);
+            this.thinkLabel.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -185,6 +195,7 @@
         private System.Windows.Forms.RichTextBox moveHistoryTextBox;
         private System.Windows.Forms.Button backBtn;
         private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
+        private System.Windows.Forms.Label thinkLabel;
     }
 }
 
