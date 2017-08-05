@@ -23,7 +23,19 @@ namespace ChessCS
             Y_Des = y_des;
             Piece = chessBoard.Board[x_src, y_src];
             Capture = chessBoard.Board[x_des, y_des];
-            PawnPromotion = false;
+            if (chessBoard.Board[x_src,y_src]=='P')
+            {
+                if (x_des==0)
+                {
+                    PawnPromotion = true;
+                }
+            } else if (chessBoard.Board[x_src,y_src]=='p')
+            {
+                if (x_des==7)
+                {
+                    PawnPromotion = true;
+                }
+            }
         }
 
         public static string PositionFromCoordinate(int x, int y)

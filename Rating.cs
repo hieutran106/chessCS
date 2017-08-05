@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessCS.ChessPieces;
+
 
 namespace ChessCS
 {
@@ -83,17 +85,32 @@ namespace ChessCS
             kingEvalBlack = FlipMatrix(kingEvalWhite);
 
         }
-        public int EvaluateBoard(char[,] board)
+        public int EvaluateBoard(ChessBoard chessBoard)
         {
+            int x_whiteKing = -1;
+            int y_whiteKing = -1;
+            int x_blackKing = -1;
+            int y_blackKing = -1;
             int totalEvaluation = 0;
+
+            char[,] board = chessBoard.Board;
             for (int i=0;i<8;i++)
                 for (int j=0;j<8;j++)
                 {
                     totalEvaluation = totalEvaluation + GetPieceValue(board, i, j);
+                    if (board[i,j]=='K')
+                    {
+                        x_whiteKing = i;
+                        y_whiteKing = j;
+                    } else  if (board[i,j]=='k')
+                    {
+                        x_blackKing = i;
+                        y_blackKing = j;
+                    }
                 }
             return totalEvaluation;
         }
-
+        
         public int[,] FlipMatrix(int[,] matrix)
         {
             int[,] ret = new int[8, 8];

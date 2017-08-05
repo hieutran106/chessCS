@@ -39,7 +39,7 @@ namespace ChessCS
             }
         }
         public char[,] Board { get; set; }
-        static int globalDepth = 2;
+        static int globalDepth = 4;
         private Rating rating;
         public ChessBoard()
         {
@@ -286,7 +286,7 @@ namespace ChessCS
             {
                 //Negate the value
                 int sign = (player == BLACK) ? -1 : 1;
-                int evaluation = rating.EvaluateBoard(Board);
+                int evaluation = rating.EvaluateBoard(this);
                 if (evaluation==300|| evaluation==-300)
                 {
                     Console.WriteLine();
@@ -300,7 +300,7 @@ namespace ChessCS
             {
                 //Negate the value
                 int sign = (player == BLACK) ? -1 : 1;
-                int evaluation = rating.EvaluateBoard(Board);
+                int evaluation = rating.EvaluateBoard(this);
                 MNResult result = new MNResult(move, evaluation*sign);               
                 return result;
             }
@@ -367,7 +367,7 @@ namespace ChessCS
             }
             else
             {
-                MNResult result= AlphaBeta(2, 1000000, -1000000, null, false);
+                MNResult result= AlphaBeta(4, 1000000, -1000000, null, false);
                 Console.WriteLine("Best move:" + result.Move);
                 return result.Move;
             }
