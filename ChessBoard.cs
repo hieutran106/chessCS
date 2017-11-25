@@ -21,6 +21,13 @@ namespace ChessCS
          */
         public static bool BLACK = false;
         public static bool WHITE = true;
+        //check, checkmate and stalemate
+
+        public bool BlackCheck { get; private set; }
+        public bool BlackCheckMate { get; private set; }
+        public bool WhiteCheck { get; private set; }
+        public bool WhiteCheckMate { get; private set; }
+        public bool StaleMate { get; private set; }
 
 
         private bool activeColor;
@@ -279,45 +286,45 @@ namespace ChessCS
             Console.WriteLine("   +------------------------+");
             Console.WriteLine("     a  b  c  d  e  f  g  h");
         }
+
+        private MNResult EvaluateNode(Move move, bool player)
+        {
+            
+            int evaluation = rating.EvaluateBoard(this);
+            //Negate the value
+            if (player == BLACK)
+                evaluation = -evaluation;
+            MNResult result = new MNResult(move, evaluation);
+            return result;
+        }
         public MNResult AlphaBeta(int depth, int beta, int alpha, Move move, bool player)
         {
             //BLACK is max player
+            bool isMaxPlayer = (player == BLACK) ? true : false;
+         
             if (depth==0)
             {
-                //Negate the value
-                int sign = (player == BLACK) ? -1 : 1;
-                int evaluation = rating.EvaluateBoard(this);
-                if (evaluation==300|| evaluation==-300)
-                {
-                    Console.WriteLine();
-                }
-                MNResult result = new MNResult(move, evaluation*sign);
-                Console.WriteLine($"Move: {result.Move}, value={result.Value}, depth={2-depth}");
-                return result;
+                return EvaluateNode(move, player);
             }
+
             List<Move> possibleMoves = PossibleMoves(player);
             if (possibleMoves.Count==0)
             {
-                //Negate the value
-                int sign = (player == BLACK) ? -1 : 1;
-                int evaluation = rating.EvaluateBoard(this);
-                MNResult result = new MNResult(move, evaluation*sign);               
-                return result;
+                return EvaluateNode(move, player);
             }
-
-            //sort later
-            player = !player;
+            //sort later           
             foreach (Move eleMove in possibleMoves)
             {
                 MakeMove(eleMove);
-                MNResult result = AlphaBeta(depth - 1, beta, alpha, eleMove, player);
+                bool nextPlayer = !player;
+                MNResult result = AlphaBeta(depth - 1, beta, alpha, eleMove, nextPlayer);
                 int value = result.Value;
                 
                 UndoMove(eleMove);
                 //BLACK is Max Player
-                if (player==BLACK)
+                if (isMaxPlayer)
                 {
-                    if (value<=beta)
+                    if (value<beta) //Max Nodes can only make restriction on the lower bound
                     {
                         beta = value;
                         if (depth==globalDepth)
@@ -336,21 +343,29 @@ namespace ChessCS
                         }
                     }
                 }
-                if (alpha>=beta)
-                {
-                    if (player == BLACK)
+                if (alpha>=beta) //pruning
+                {                   
+                    if (isMaxPlayer)
+                    {
+                        return new MNResult(move, alpha);
+                    } else
                     {
                         return new MNResult(move, beta);
                     }
-                    else return new MNResult(move, alpha);
                 }
                 
             }
-            if (player == BLACK)
+
+            // Travel all child node, no prunning
+            if (isMaxPlayer)
             {
-                return new MNResult(move, beta);
+                //value of node is alpha value
+                return new MNResult(move, alpha);
             }
-            else return new MNResult(move, alpha);
+            else {
+                //value of min node is beta value
+                return new MNResult(move, beta);
+            } 
 
         }
         public Move GetAIMove()
@@ -367,7 +382,8 @@ namespace ChessCS
             }
             else
             {
-                MNResult result= AlphaBeta(4, 1000000, -1000000, null, false);
+                bool maxPlayer = BLACK;
+                MNResult result= AlphaBeta(4, 1000000, -1000000, null, maxPlayer);
                 Console.WriteLine("Best move:" + result.Move);
                 return result.Move;
             }

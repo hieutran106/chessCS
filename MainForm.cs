@@ -152,8 +152,9 @@ namespace ChessCS
                             boardGUI[x_highlight, y_highlight].IsHighlight = false;
                             if (p.X == x_highlight && p.Y == y_highlight)
                             {
-                                //Console.WriteLine($"Make move to [{p.X},{p.Y}]");
+                                //Player Move
                                 MakeMove(x_select, y_select, p.X, p.Y);
+
                             }
                         }
                         possibleMoves = null;
