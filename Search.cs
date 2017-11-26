@@ -20,28 +20,46 @@ namespace ChessCS
             evaluation = new Evaluation();
         }
 
-        public static Move SearchMove(ChessBoard examinedBoard, bool player)
+        public static Move SearchMove(ChessBoard examinedBoard, bool player,bool debug)
         {
             Search search = new Search();
             search.examinedBoard = examinedBoard.FastCopy();
-            MNResult result = search.AlphaBeta(4, 1000000, -1000000, null, player);
+            MNResult result = search.AlphaBeta(4, 1000000, -1000000, null, player,debug);
             return result.Move;
 
         }
-        private MNResult AlphaBeta(int depth, int beta, int alpha, Move move, bool player)
+        private MNResult AlphaBeta(int depth, int beta, int alpha, Move move, bool player,bool debug=false)
         {
             //BLACK is max player
             bool isMaxPlayer = (player == BLACK) ? true : false;
 
             if (depth == 0)
             {
-                return EvaluateNode(move, player);
+                return EvaluateNode(move, player,debug);
+            }
+            List<Move> possibleMoves=null;
+            if (!debug)
+            {
+                possibleMoves = examinedBoard.PossibleMoves(player);
+            } else
+            {
+                Console.Write("How many moves are there:");
+                int count = Convert.ToInt32(Console.ReadLine());
+                possibleMoves = new List<Move>();
+
+
+                for (int i=0;i<count;i++)
+                {
+                    Move debugMove = new Move(1, 4, 3, 4,this.examinedBoard);
+                    possibleMoves.Add(debugMove);
+                }
+
             }
 
-            List<Move> possibleMoves = examinedBoard.PossibleMoves(player);
+            
             if (possibleMoves.Count == 0)
             {
-                return EvaluateNode(move, player);
+                return EvaluateNode(move, player,debug);
             }
             //sort later           
             foreach (Move eleMove in possibleMoves)
@@ -49,27 +67,28 @@ namespace ChessCS
 
                 examinedBoard.MakeMove(eleMove);
                 bool nextPlayer = !player;
-                MNResult result = AlphaBeta(depth - 1, beta, alpha, eleMove, nextPlayer);
+                MNResult result = AlphaBeta(depth - 1, beta, alpha, eleMove, nextPlayer,debug);
                 int value = result.Value;
 
                 examinedBoard.UndoMove(eleMove);
                 //BLACK is Max Player
                 if (isMaxPlayer)
                 {
-                    if (value < beta) //Max Nodes can only make restriction on the lower bound
+                    if (value > alpha) //Max Nodes can only make restriction on the lower bound
                     {
-                        beta = value;
+                        alpha = value;
                         if (depth == globalDepth)
                         {
                             move = result.Move;
                         }
                     }
+                    
                 }
                 else
                 {
-                    if (value > alpha)
+                    if (value < beta)
                     {
-                        alpha = value;
+                        beta = value;
                         if (depth == globalDepth)
                         {
                             move = result.Move;
@@ -102,15 +121,24 @@ namespace ChessCS
                 return new MNResult(move, beta);
             }
         }
-        private MNResult EvaluateNode(Move move, bool player)
+        private MNResult EvaluateNode(Move move, bool player, bool debug)
         {
-            
-            int score = evaluation.EvaluateBoard(this.examinedBoard);
-            //Negate the value
-            if (player == BLACK)
-                score = -score;
+            int score;
+            if (!debug)
+            {
+                score = evaluation.EvaluateBoard(this.examinedBoard);
+                //Negate the value
+                if (player == BLACK)
+                    score = -score;
+               
+            } else
+            {
+                Console.Write("What is the score:");
+                score = Convert.ToInt32(Console.ReadLine());
+            }
             MNResult result = new MNResult(move, score);
             return result;
+
         }
     }
 }

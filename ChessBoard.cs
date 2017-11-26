@@ -287,7 +287,7 @@ namespace ChessCS
             }
             else
             {
-                Move bestMove = Search.SearchMove(this, false);
+                Move bestMove = Search.SearchMove(this, false,debug:false);
                 Console.WriteLine("Best move:" + bestMove);
                 return bestMove;
             }

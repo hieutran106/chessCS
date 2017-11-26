@@ -29,7 +29,7 @@ namespace ChessCS
             set
             {
                 chessBoard = value;
-                infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor?"white":"black")} fullMove:{chessBoard.Fullmove}";
+                infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor?"white":"black")} fullMove:{chessBoard.FullMove}";
                 for (int i = 0; i < 8; i++)
                     for (int j = 0; j < 8; j++)
                         boardGUI[i, j].Piece = chessBoard.Board[i, j];
@@ -187,11 +187,11 @@ namespace ChessCS
             boardGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
             boardGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
             //Update info
-            infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.Fullmove}";
+            infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
             //
             if (chessBoard.ActiveColor==ChessBoard.BLACK)
             {
-                moveHistoryTextBox.AppendText($"\n{chessBoard.Fullmove}. {move}");
+                moveHistoryTextBox.AppendText($"\n{chessBoard.FullMove}. {move}");
             } else
             {
                 moveHistoryTextBox.AppendText($"  {move}");
@@ -258,7 +258,7 @@ namespace ChessCS
             boardGUI[move.X_Src, move.Y_Src].Piece = chessBoard.Board[move.X_Src, move.Y_Src];
             boardGUI[move.X_Des, move.Y_Des].Piece = chessBoard.Board[move.X_Des, move.Y_Des];
             //Update info
-            infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.Fullmove}";
+            infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
             //remove text in rich text box
             StringBuilder text = new StringBuilder(moveHistoryTextBox.Text);
             
