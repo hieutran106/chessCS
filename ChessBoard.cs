@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace ChessCS
 {
+    public enum Player
+    {
+        White,
+        Black
+    }
     public class ChessBoard
     {
         /*
@@ -21,37 +26,15 @@ namespace ChessCS
          */
         public static bool BLACK = false;
         public static bool WHITE = true;
-        //check, checkmate and stalemate
 
-        public bool BlackCheck { get; private set; }
-        public bool BlackCheckMate { get; private set; }
-        public bool WhiteCheck { get; private set; }
-        public bool WhiteCheckMate { get; private set; }
-        public bool StaleMate { get; private set; }
-
-
-        private bool activeColor;
-        public bool ActiveColor
-        {
-            get {
-                return activeColor;
-            }
-        }
-        private int fullMove;
-        public int Fullmove
-        {
-            get
-            {
-                return fullMove;
-            }
-        }
+        public bool ActiveColor { get; set; }
+        public int FullMove { get; set; }
         public char[,] Board { get; set; }
-        static int globalDepth = 4;
-        private Rating rating;
+        
         public ChessBoard()
         {
             Board = new char[8, 8];
-            rating = new Rating();
+            
         }
         
         //Reset the board
@@ -60,8 +43,8 @@ namespace ChessCS
             //FEN for starting position
             string startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w";
             Load(startingPosition);
-            activeColor = WHITE;
-            fullMove = 1;
+            ActiveColor = WHITE;
+            FullMove = 1;
         }
         //Returns the FEN string for the current board
         public string GetFEN()
@@ -135,9 +118,11 @@ namespace ChessCS
             }
             //active color and full move
             string activeColor_str = block[1];
-            activeColor = (activeColor_str[0] == 'w') ? WHITE : BLACK;
+            ActiveColor = (activeColor_str[0] == 'w') ? WHITE : BLACK;
             //full move
+            int fullMove;
             int.TryParse(block[block.Length-1], out fullMove);
+            FullMove = fullMove;
         }
         //Put a piece 
         public void Put(char p,string position)
@@ -172,18 +157,18 @@ namespace ChessCS
             Board[move.X_Des, move.Y_Des] = move.Piece;
             if (move.PawnPromotion)
             {
-                if (activeColor == WHITE)
+                if (ActiveColor == WHITE)
                     Board[move.X_Des, move.Y_Des] = 'Q';
                 else Board[move.X_Des, move.Y_Des] = 'q';
             }
             //update active color and full move
-            if (activeColor==WHITE)
+            if (ActiveColor==WHITE)
             {
-                activeColor = BLACK;
+                ActiveColor = BLACK;
             } else
             {
-                fullMove++;
-                activeColor = WHITE;
+                FullMove++;
+                ActiveColor = WHITE;
             }
         }
         public void UndoMove(Move move)
@@ -192,13 +177,13 @@ namespace ChessCS
             Board[move.X_Src, move.Y_Src] = move.Piece;
             Board[move.X_Des, move.Y_Des] = move.Capture;
             //update active color and full move
-            if (activeColor==BLACK)
+            if (ActiveColor==BLACK)
             {
-                activeColor = WHITE;
+                ActiveColor = WHITE;
             } else
             {
-                activeColor = BLACK;
-                fullMove--;
+                ActiveColor = BLACK;
+                FullMove--;
             }
         }
         public bool CanCapture(int x,int y, bool color)
@@ -287,106 +272,34 @@ namespace ChessCS
             Console.WriteLine("     a  b  c  d  e  f  g  h");
         }
 
-        private MNResult EvaluateNode(Move move, bool player)
-        {
-            
-            int evaluation = rating.EvaluateBoard(this);
-            //Negate the value
-            if (player == BLACK)
-                evaluation = -evaluation;
-            MNResult result = new MNResult(move, evaluation);
-            return result;
-        }
-        public MNResult AlphaBeta(int depth, int beta, int alpha, Move move, bool player)
-        {
-            //BLACK is max player
-            bool isMaxPlayer = (player == BLACK) ? true : false;
-         
-            if (depth==0)
-            {
-                return EvaluateNode(move, player);
-            }
-
-            List<Move> possibleMoves = PossibleMoves(player);
-            if (possibleMoves.Count==0)
-            {
-                return EvaluateNode(move, player);
-            }
-            //sort later           
-            foreach (Move eleMove in possibleMoves)
-            {
-                MakeMove(eleMove);
-                bool nextPlayer = !player;
-                MNResult result = AlphaBeta(depth - 1, beta, alpha, eleMove, nextPlayer);
-                int value = result.Value;
-                
-                UndoMove(eleMove);
-                //BLACK is Max Player
-                if (isMaxPlayer)
-                {
-                    if (value<beta) //Max Nodes can only make restriction on the lower bound
-                    {
-                        beta = value;
-                        if (depth==globalDepth)
-                        {
-                            move = result.Move;
-                        }
-                    }
-                } else
-                {
-                    if (value>alpha)
-                    {
-                        alpha = value;
-                        if (depth==globalDepth)
-                        {
-                            move = result.Move;
-                        }
-                    }
-                }
-                if (alpha>=beta) //pruning
-                {                   
-                    if (isMaxPlayer)
-                    {
-                        return new MNResult(move, alpha);
-                    } else
-                    {
-                        return new MNResult(move, beta);
-                    }
-                }
-                
-            }
-
-            // Travel all child node, no prunning
-            if (isMaxPlayer)
-            {
-                //value of node is alpha value
-                return new MNResult(move, alpha);
-            }
-            else {
-                //value of min node is beta value
-                return new MNResult(move, beta);
-            } 
-
-        }
+        
         public Move GetAIMove()
         {
-            if (Fullmove == 1 && ActiveColor == ChessBoard.BLACK)
+            if (FullMove == 1 && ActiveColor == ChessBoard.BLACK)
             {
                 Move move = GetMove(1, 4, 3, 4);
                 return move;
             }
-            else if (Fullmove == 2 && ActiveColor == ChessBoard.BLACK)
+            else if (FullMove == 2 && ActiveColor == ChessBoard.BLACK)
             {
                 Move move = GetMove(0, 1, 2, 2);
                 return move;
             }
             else
             {
-                bool maxPlayer = BLACK;
-                MNResult result= AlphaBeta(4, 1000000, -1000000, null, maxPlayer);
-                Console.WriteLine("Best move:" + result.Move);
-                return result.Move;
+                Move bestMove = Search.SearchMove(this, false);
+                Console.WriteLine("Best move:" + bestMove);
+                return bestMove;
             }
+        }
+
+        public ChessBoard FastCopy()
+        {
+            ChessBoard clonedBoard = new ChessBoard();
+            clonedBoard.Board = this.Board.Clone() as char[,];
+            clonedBoard.ActiveColor = this.ActiveColor;
+            clonedBoard.FullMove = this.FullMove;
+            return clonedBoard;
         }
     }
 }

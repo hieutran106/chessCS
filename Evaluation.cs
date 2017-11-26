@@ -8,7 +8,7 @@ using ChessCS.ChessPieces;
 
 namespace ChessCS
 {
-    public class Rating
+    public class Evaluation
     {
         private int[,] pawnEvalWhite ={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
         { 0,  0,  0,  0,  0,  0,  0,  0},
@@ -75,7 +75,7 @@ namespace ChessCS
         { 20, 20,  0,  0,  0,  0, 20, 20},
         { 20, 30, 10,  0,  0, 10, 30, 20}};
         private int[,] kingEvalBlack;
-        public Rating()
+        public Evaluation()
         {
             pawnEvalBlack = FlipMatrix(pawnEvalWhite);
             rookEvalBlack = FlipMatrix(rookEvalWhite);
