@@ -141,7 +141,6 @@ namespace ChessCS
                 }
                 else if (isSelected == true)
                 {
-                    //Console.WriteLine($"De_select at [{p.X},{p.Y}]");                     
                     //remove hightlight in possible move
                     if (possibleMoves != null)
                     {
@@ -154,28 +153,38 @@ namespace ChessCS
                             {
                                 //Player Move
                                 MakeMove(x_select, y_select, p.X, p.Y);
-
                             }
                         }
                         possibleMoves = null;
                     }
-                    isSelected = false;
-                    boardGUI[x_select, y_select].IsHighlight = false;
-                    x_select = -1;
-                    y_select = -1;
+                    
+                    //If a valid move, let computer take action
+                    if (x_select != p.X || y_select != p.Y)
+                    {
+                        CancelCurrentSelection();
+                        //computer move
+                        thinkLabel.Text = "Computer is thinking....";
+                        Task<Move> computerMoveTask = Task.Run(() => chessBoard.GetAIMove());
 
-                    //computer move
-                    thinkLabel.Text = "Computer is thinking....";
-                    Task<Move> computerMoveTask = Task.Run(()=>chessBoard.GetAIMove());
-
-                    //wait for Task
-                    await computerMoveTask;
-                    Move computerMove = computerMoveTask.Result;
-                    thinkLabel.Text = "";
-                    //
-                    MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
+                        //wait for Task
+                        await computerMoveTask;
+                        Move computerMove = computerMoveTask.Result;
+                        thinkLabel.Text = "";
+                        //
+                        MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
+                    } else
+                    {
+                        CancelCurrentSelection();
+                    }
                 }
             }
+        }
+        private void CancelCurrentSelection()
+        {
+            isSelected = false;
+            boardGUI[x_select, y_select].IsHighlight = false;
+            x_select = -1;
+            y_select = -1;
         }
         public void MakeMove(int x_src,int y_src, int x_des,int y_des)
         {
