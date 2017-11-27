@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace ChessCS
 {
-    class SquareBox: PictureBox
+    class SquareBox : PictureBox
     {
         public static Color darkColor = Color.FromArgb(118, 150, 86);
         public static Color whiteColor = Color.FromArgb(238, 238, 210);
@@ -18,18 +18,16 @@ namespace ChessCS
         public int X { set; get; }
         public int Y { set; get; }
         private bool isHighlight;
-        public bool IsHighlight { get { return isHighlight; } set {
+        public bool IsHighlight
+        {
+            get { return isHighlight; }
+            set
+            {
                 isHighlight = value;
                 this.Invalidate();
-                if (isHighlight)
-                {
-                    Console.WriteLine($"Hightlight [{X},{Y}]");
-                } else
-                {
-                    Console.WriteLine($"Remove hightlight [{X},{Y}]");
-                }
-               
-            } }
+
+            }
+        }
 
         private bool showCoordinate;
         public bool ShowCoordinate
@@ -44,34 +42,18 @@ namespace ChessCS
                 this.Invalidate();
             }
         }
-        private char piece;
-        public char Piece {
-            get { return piece; } set {
-                piece = value;
-                if (piece=='.')
-                {
-                    this.ImageLocation = null;
-                } else
-                {
-                    string dir = Path.GetDirectoryName(Application.ExecutablePath);
-                    string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
-                    this.ImageLocation = filename;
-                }
-                
-            } }
 
-        public SquareBox(int x, int y) :base()
+        public SquareBox(int x, int y) : base()
         {
             X = x;
             Y = y;
             showCoordinate = false;
-            piece = '.';
             this.Size = new Size(SIZE, SIZE);
-            this.Location = new Point(y * SIZE, 30+x * SIZE);
+            this.Location = new Point(y * SIZE, 30 + x * SIZE);
             this.BackColor = ((x + y) % 2 == 0) ? whiteColor : darkColor;
             SizeMode = PictureBoxSizeMode.StretchImage;
             ShowCoordinate = true;
-            
+
         }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -88,6 +70,6 @@ namespace ChessCS
                 }
             }
         }
-        
+
     }
 }

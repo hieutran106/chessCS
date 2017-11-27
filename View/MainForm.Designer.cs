@@ -38,9 +38,9 @@
             this.coordinateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.thinkLabel = new System.Windows.Forms.Label();
             this.backBtn = new System.Windows.Forms.Button();
             this.moveHistoryTextBox = new System.Windows.Forms.RichTextBox();
-            this.thinkLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -134,6 +134,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Moves";
             // 
+            // thinkLabel
+            // 
+            this.thinkLabel.AutoSize = true;
+            this.thinkLabel.Location = new System.Drawing.Point(9, 214);
+            this.thinkLabel.Name = "thinkLabel";
+            this.thinkLabel.Size = new System.Drawing.Size(0, 13);
+            this.thinkLabel.TabIndex = 4;
+            // 
             // backBtn
             // 
             this.backBtn.Location = new System.Drawing.Point(7, 161);
@@ -152,18 +160,11 @@
             this.moveHistoryTextBox.TabIndex = 0;
             this.moveHistoryTextBox.Text = "";
             // 
-            // thinkLabel
-            // 
-            this.thinkLabel.AutoSize = true;
-            this.thinkLabel.Location = new System.Drawing.Point(9, 214);
-            this.thinkLabel.Name = "thinkLabel";
-            this.thinkLabel.Size = new System.Drawing.Size(0, 13);
-            this.thinkLabel.TabIndex = 4;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(862, 515);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.getFENBtn);
