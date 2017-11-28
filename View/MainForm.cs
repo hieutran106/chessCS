@@ -25,6 +25,7 @@ namespace ChessCS
         #region GUI
         private SquareBox[,] boardGUI;
         private ChessPieceGUI[,] chessPiecesGUI;
+        private ChessBoardControl chessBoardControl;
         #endregion
         public ChessBoard ChessBoard {
             get
@@ -35,7 +36,6 @@ namespace ChessCS
             {
                 chessBoard = value;
                 infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor?"white":"black")} fullMove:{chessBoard.FullMove}";
-                int index = -1;
                 //init board GUI           
                 chessPiecesGUI = new ChessPieceGUI[8, 8];
                 for (int i = 0; i < 8; i++)
@@ -48,7 +48,7 @@ namespace ChessCS
                             chessPiecesGUI[i, j] = piece;
                             chessPiecesGUI[i, j].Piece = chessBoard.Board[i, j];
                             
-                            this.Controls.Add(piece);
+                           // this.Controls.Add(piece);
                             //piece.BringToFront();
                             
 
@@ -60,7 +60,7 @@ namespace ChessCS
                     for (int j = 0; j < 8; j++)
                     {
                         SquareBox squareBox = new SquareBox(i, j);
-                        squareBox.MouseUp += new MouseEventHandler(this.SquareBox_Click);
+                        
                         boardGUI[i, j] = squareBox;//important
 
 
@@ -79,8 +79,8 @@ namespace ChessCS
                         squareBox.ContextMenu.MenuItems.Add(addPieceItem);
                         squareBox.ContextMenu.MenuItems.Add(removePieceitem);
 
-                        this.Controls.Add(squareBox);
-                        //Console.WriteLine("z-index: squarebox" + this.Controls.GetChildIndex(squareBox));
+                        //this.Controls.Add(squareBox);
+                        
                     }
                 foreach (var ele in this.Controls)
                 {
@@ -95,8 +95,10 @@ namespace ChessCS
             InitializeComponent();
 
 
-            
 
+            chessBoardControl = new ChessBoardControl();
+            chessBoardControl.MouseUp += new MouseEventHandler(this.ChessBoardControl_Click);
+            this.Controls.Add(chessBoardControl);
             //move history
             moveHistory = new Stack<Move>();
                             
@@ -138,40 +140,36 @@ namespace ChessCS
             return moves;
 
         }
-        private async void SquareBox_Click(object sender, MouseEventArgs e)
+        private async void ChessBoardControl_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                SquareBox p = (SquareBox)sender;
                 
-                if (chessBoard.Board[p.X, p.Y] != '.' && isSelected == false) //Click on a chess piece
+                int col = e.Location.X / ChessBoardControl.SIZE;
+                int row = e.Location.Y / ChessBoardControl.SIZE;
+                Console.WriteLine($"Click at [{row},{col}]");
+                if (chessBoard.Board[row, col] != '.' && isSelected == false) //Click on a chess piece
                 {
-                    bool clickColor = char.IsUpper(chessBoard.Board[p.X, p.Y]);
+                    bool clickColor = char.IsUpper(chessBoard.Board[row, col]);
                     if (clickColor == chessBoard.ActiveColor)
                     {
                         isSelected = true;
-                        x_select = p.X;
-                        y_select = p.Y;
-                        //show border
-                        boardGUI[x_select, y_select].IsHighlight = true;
+                        x_select = row;
+                        y_select = col;
+                        //show border for current row
+                        chessBoardControl.HighlighCell(new Point(row, col));
                         //show border for possible move
                         possibleMoves = PossibleMove(x_select, y_select);
-                        if (possibleMoves != null)
-                        {
-                            foreach (Move move in possibleMoves)
-                            {
-                                int x_highlight = move.X_Des;
-                                int y_highlight = move.Y_Des;
-                                boardGUI[x_highlight, y_highlight].IsHighlight = true;
-                            }
-                        }
-                    } else
+                        chessBoardControl.HighlighCells(possibleMoves);
+                    }
+                    else
                     {
+                        //It's BLACK turn
                         Console.WriteLine("Wrong active color");
-                    }                 
-                }
-                else if (isSelected == true)
+                    }
+                } else if (isSelected ==true)
                 {
+                    chessBoardControl.RemoveHighlightCells();
                     //remove hightlight in possible move
                     if (possibleMoves != null)
                     {
@@ -180,17 +178,18 @@ namespace ChessCS
                             int x_highlight = move.X_Des;
                             int y_highlight = move.Y_Des;
                             boardGUI[x_highlight, y_highlight].IsHighlight = false;
-                            if (p.X == x_highlight && p.Y == y_highlight)
+                            if (row == x_highlight && col == y_highlight)
                             {
                                 //Player Move
-                                MakeMove(x_select, y_select, p.X, p.Y);
+                                MakeMove(x_select, y_select, row, col);
+                                break;
                             }
                         }
                         possibleMoves = null;
                     }
-                    
+
                     //If a valid move, let computer take action
-                    if (x_select != p.X || y_select != p.Y)
+                    if (x_select != row || y_select != col)
                     {
                         CancelCurrentSelection();
                         //computer move
@@ -203,17 +202,18 @@ namespace ChessCS
                         thinkLabel.Text = "";
                         //
                         MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
-                    } else
+                    }
+                    else
                     {
                         CancelCurrentSelection();
                     }
                 }
             }
         }
+        
         private void CancelCurrentSelection()
         {
             isSelected = false;
-            boardGUI[x_select, y_select].IsHighlight = false;
             x_select = -1;
             y_select = -1;
         }

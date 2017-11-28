@@ -78,6 +78,9 @@
     <Compile Include="ChessPieces\Pawn.cs" />
     <Compile Include="ChessPieces\Queen.cs" />
     <Compile Include="ChessPieces\Rook.cs" />
+    <Compile Include="View\ChessBoardControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\ChessPieceGUI.cs">
       <SubType>Component</SubType>
     </Compile>
