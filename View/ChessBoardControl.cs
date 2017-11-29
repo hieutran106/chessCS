@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace ChessCS.View
         public static Color darkColor = Color.FromArgb(118, 150, 86);
         public static Color whiteColor = Color.FromArgb(238, 238, 210);
 
+        public ChessBoard ChessBoard { get; set; }
         public const int SIZE = 60;
         private bool showCoordinate;
         public bool ShowCoordinate
@@ -28,12 +30,15 @@ namespace ChessCS.View
             }
         }
         private List<Point> highlightedCells;
-        public ChessBoardControl()
+        
+        public ChessBoardControl(ChessBoard chessBoard)
         {
             this.Location = new Point(0, 30);
             this.Size = new Size(8 * SIZE, 8 * SIZE);
             highlightedCells = new List<Point>();
             showCoordinate = true;
+            this.ChessBoard = chessBoard;
+            
         }
         //
         public void HighlighCell(Point cell)
@@ -68,7 +73,6 @@ namespace ChessCS.View
             SolidBrush whiteBrush = new SolidBrush(whiteColor);
             SolidBrush darkBrush = new SolidBrush(darkColor);
             Font font = new Font("Arial", 10);
-
             for (int i = 0; i < 64; i++)
             {
                 int col = i % 8;
@@ -86,24 +90,30 @@ namespace ChessCS.View
                 }
                 PaintCoordinate(e,font,row,col);
 
-
-               
-                //paint the chess piece 
-                if (i==0)
-                {
-
-                }
+                DrawChessPieces(e, row, col);
+              
 
             }
             font.Dispose();
             whiteBrush.Dispose();
             darkBrush.Dispose();
         }
+        private void DrawChessPieces(PaintEventArgs e, int row, int col)
+        {
+            char piece = ChessBoard.Board[row, col];
+            if (piece!='.')
+            {
+                string dir = Path.GetDirectoryName(Application.ExecutablePath);
+                string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
+                Image image = Image.FromFile(filename);
+                e.Graphics.DrawImage(image, col * SIZE, row * SIZE, SIZE, SIZE);
+            }
+        }
         private void PaintHighlighSquare(PaintEventArgs e)
         {
             if (highlightedCells.Count!=0)
             {
-                Pen selPen = new Pen(Color.Red);
+                Pen selPen = new Pen(Color.PaleVioletRed,3);
                 
                 foreach (Point point in highlightedCells)
                 {

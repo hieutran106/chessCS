@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,8 +24,6 @@ namespace ChessCS
         private Stack<Move> moveHistory;
 
         #region GUI
-        private SquareBox[,] boardGUI;
-        private ChessPieceGUI[,] chessPiecesGUI;
         private ChessBoardControl chessBoardControl;
         #endregion
         public ChessBoard ChessBoard {
@@ -35,80 +34,34 @@ namespace ChessCS
             set
             {
                 chessBoard = value;
-                infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor?"white":"black")} fullMove:{chessBoard.FullMove}";
-                //init board GUI           
-                chessPiecesGUI = new ChessPieceGUI[8, 8];
-                for (int i = 0; i < 8; i++)
-                    for (int j = 0; j < 8; j++)
-                    {
-                        
-                        if (chessBoard.Board[i,j]!='.')
-                        {
-                            ChessPieceGUI piece = new ChessPieceGUI(i, j);
-                            chessPiecesGUI[i, j] = piece;
-                            chessPiecesGUI[i, j].Piece = chessBoard.Board[i, j];
-                            
-                           // this.Controls.Add(piece);
-                            //piece.BringToFront();
-                            
-
-                        }
-                        
-                    }
-                boardGUI = new SquareBox[8, 8];
-                for (int i = 0; i < 8; i++)
-                    for (int j = 0; j < 8; j++)
-                    {
-                        SquareBox squareBox = new SquareBox(i, j);
-                        
-                        boardGUI[i, j] = squareBox;//important
-
-
-
-                        ContextMenu mnuContextMenu = new ContextMenu();
-                        squareBox.ContextMenu = mnuContextMenu;
-
-                        MenuItem addPieceItem = new MenuItem();
-                        addPieceItem.Text = "Add a piece";
-                        // Add functionality to the menu items using the Click event. 
-                        addPieceItem.Click += new System.EventHandler(this.AddPieceItem_Click);
-                        MenuItem removePieceitem = new MenuItem();
-                        removePieceitem.Text = "Remove piece";
-                        removePieceitem.Click += new System.EventHandler(this.RemovePieceItem_Click);
-
-                        squareBox.ContextMenu.MenuItems.Add(addPieceItem);
-                        squareBox.ContextMenu.MenuItems.Add(removePieceitem);
-
-                        //this.Controls.Add(squareBox);
-                        
-                    }
-                foreach (var ele in this.Controls)
-                {
-                    Console.WriteLine(ele);
-                }
-                        
+                infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor?"white":"black")} fullMove:{chessBoard.FullMove}";               
             }
         }
+
         
         public MainForm()
         {
             InitializeComponent();
-
-
-
-            chessBoardControl = new ChessBoardControl();
-            chessBoardControl.MouseUp += new MouseEventHandler(this.ChessBoardControl_Click);
-            this.Controls.Add(chessBoardControl);
-            //move history
-            moveHistory = new Stack<Move>();
                             
         }
+        public MainForm(ChessBoard chessBoard)
+        {
+            InitializeComponent();
+            chessBoardControl = new ChessBoardControl(chessBoard);
+            chessBoardControl.MouseUp += new MouseEventHandler(this.ChessBoardControl_Click);
+            this.Controls.Add(chessBoardControl);
+            this.ChessBoard = chessBoard;
+            //move history
+            moveHistory = new Stack<Move>();
+
+        }
+
         //Put a piece
         public void Put_Piece(int x,int y, char piece)
         {
             chessBoard.Board[x, y] = piece;
             //update GUI
-            chessPiecesGUI[x, y].Piece = piece;
+            //chessPiecesGUI[x, y].Piece = piece;
         }
         private List<Move> PossibleMove(int x,int y)
         {
@@ -177,7 +130,7 @@ namespace ChessCS
                         {
                             int x_highlight = move.X_Des;
                             int y_highlight = move.Y_Des;
-                            boardGUI[x_highlight, y_highlight].IsHighlight = false;
+                            //boardGUI[x_highlight, y_highlight].IsHighlight = false;
                             if (row == x_highlight && col == y_highlight)
                             {
                                 //Player Move
@@ -224,8 +177,8 @@ namespace ChessCS
             moveHistory.Push(move);
 
             //Update GUI
-            chessPiecesGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
-            chessPiecesGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
+            //chessPiecesGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
+            //chessPiecesGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
             //Update info
             infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
             //
@@ -242,25 +195,25 @@ namespace ChessCS
         //Context Menu
         private void AddPieceItem_Click(object sender, EventArgs e)
         {
-            MenuItem menuItem = sender as MenuItem;
+            //MenuItem menuItem = sender as MenuItem;
 
-            if (menuItem != null)
-            {
-                ContextMenu contextMenu = menuItem.GetContextMenu();
-                //Get picture box
-                Control sourceControl = contextMenu.SourceControl;
-                SquareBox squareBox = sourceControl as SquareBox;
-                if (squareBox != null)
-                {
-                    //remove piece
-                    //get position
-                    int x = squareBox.X;
-                    int y = squareBox.Y;
-                    //update
-                    AddPieceForm form = new AddPieceForm(x,y,this);
-                    form.Show();
-                }
-            }
+            //if (menuItem != null)
+            //{
+            //    ContextMenu contextMenu = menuItem.GetContextMenu();
+            //    //Get picture box
+            //    Control sourceControl = contextMenu.SourceControl;
+            //    SquareBox squareBox = sourceControl as SquareBox;
+            //    if (squareBox != null)
+            //    {
+            //        //remove piece
+            //        //get position
+            //        int x = squareBox.X;
+            //        int y = squareBox.Y;
+            //        //update
+            //        AddPieceForm form = new AddPieceForm(x,y,this);
+            //        form.Show();
+            //    }
+            //}
 
         }
 
@@ -272,9 +225,9 @@ namespace ChessCS
         private void coordinateToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             bool isChecked = coordinateToolStripMenuItem.Checked;
-            for (int i = 0; i < 8; i++)
-                for (int j = 0; j < 8; j++)
-                    boardGUI[i, j].ShowCoordinate = isChecked;
+            //for (int i = 0; i < 8; i++)
+            //    for (int j = 0; j < 8; j++)
+            //        boardGUI[i, j].ShowCoordinate = isChecked;
         }
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -295,8 +248,8 @@ namespace ChessCS
             chessBoard.UndoMove(move);
 
             //Update GUI
-            chessPiecesGUI[move.X_Src, move.Y_Src].Piece = chessBoard.Board[move.X_Src, move.Y_Src];
-            chessPiecesGUI[move.X_Des, move.Y_Des].Piece = chessBoard.Board[move.X_Des, move.Y_Des];
+            //chessPiecesGUI[move.X_Src, move.Y_Src].Piece = chessBoard.Board[move.X_Src, move.Y_Src];
+            //chessPiecesGUI[move.X_Des, move.Y_Des].Piece = chessBoard.Board[move.X_Des, move.Y_Des];
             //Update info
             infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
             //remove text in rich text box
@@ -320,24 +273,24 @@ namespace ChessCS
         {
             MenuItem menuItem = sender as MenuItem;
           
-            if (menuItem!=null)
-            {
-                ContextMenu contextMenu = menuItem.GetContextMenu();
-                //Get picture box
-                Control sourceControl = contextMenu.SourceControl;
-                SquareBox squareBox = sourceControl as SquareBox;
-                if (squareBox!=null)
-                {
-                    //remove piece
-                    //get position
-                    int x = squareBox.X;
-                    int y = squareBox.Y;
-                    //remove a chess piece
-                    Put_Piece(x, y, '.');
-                }
+            //if (menuItem!=null)
+            //{
+            //    ContextMenu contextMenu = menuItem.GetContextMenu();
+            //    //Get picture box
+            //    Control sourceControl = contextMenu.SourceControl;
+            //    SquareBox squareBox = sourceControl as SquareBox;
+            //    if (squareBox!=null)
+            //    {
+            //        //remove piece
+            //        //get position
+            //        int x = squareBox.X;
+            //        int y = squareBox.Y;
+            //        //remove a chess piece
+            //        Put_Piece(x, y, '.');
+            //    }
                 
                 
-            }
+            //}
             
         }
 

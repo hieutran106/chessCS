@@ -24,8 +24,8 @@ namespace ChessCS
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //create main form
-            MainForm mainForm = new MainForm();
-            mainForm.ChessBoard = cb;
+            MainForm mainForm = new MainForm(cb);
+            //mainForm.ChessBoard = cb;
             Evaluation rating = new Evaluation();
             //test alpha beta
             //Console.WriteLine(cb.alphaBeta(4, 1000000, -1000000, null, false));
