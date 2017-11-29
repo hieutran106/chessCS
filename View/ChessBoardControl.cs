@@ -34,6 +34,11 @@ namespace ChessCS.View
         private int x_src, y_src, x_dst, y_dst;
         private int x_ani, y_ani;
         private bool isAnimated;
+
+        SolidBrush whiteBrush = new SolidBrush(whiteColor);
+        SolidBrush darkBrush = new SolidBrush(darkColor);
+        Font font = new Font("Arial", 10);
+
         public ChessBoardControl(ChessBoard chessBoard)
         {
             this.Location = new Point(0, 30);
@@ -41,13 +46,13 @@ namespace ChessCS.View
             highlightedCells = new List<Point>();
             showCoordinate = true;
             this.ChessBoard = chessBoard;
-            
+            this.DoubleBuffered = true;
         }
         //
         public void HighlighCell(Point cell)
         {
             highlightedCells.Add(cell);
-            this.Invalidate();
+            //this.Invalidate();
         }
         public void HighlighCells(List<Move> possibleMoves)
         {
@@ -73,9 +78,6 @@ namespace ChessCS.View
         {
             Graphics g = e.Graphics;
 
-            SolidBrush whiteBrush = new SolidBrush(whiteColor);
-            SolidBrush darkBrush = new SolidBrush(darkColor);
-            Font font = new Font("Arial", 10);
             for (int i = 0; i < 64; i++)
             {
                 int col = i % 8;
@@ -85,21 +87,15 @@ namespace ChessCS.View
                     //Draw white square
                     g.FillRectangle(whiteBrush, new Rectangle(col * SIZE, row * SIZE, SIZE, SIZE));
                     
-
                 }
                 else //otherwise, draw black square
                 {
                     g.FillRectangle(darkBrush, new Rectangle(col * SIZE, row * SIZE, SIZE, SIZE));
                 }
                 PaintCoordinate(e,font,row,col);
-
-                DrawChessPieces(e, row, col);
-              
-
+                DrawChessPieces(e, row, col);             
             }
-            font.Dispose();
-            whiteBrush.Dispose();
-            darkBrush.Dispose();
+
         }
         private void DrawChessPieces(PaintEventArgs e, int row, int col)
         {
