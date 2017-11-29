@@ -22,9 +22,15 @@ namespace ChessCS
         private List<Move> possibleMoves;
         //history
         private Stack<Move> moveHistory;
-
+       
         #region GUI
         private ChessBoardControl chessBoardControl;
+        private Timer animationTimer = new Timer();
+        private int animationTick = 0;
+        private int x_move_src;
+        private int y_move_src;
+        private int x_move_dst;
+        private int y_move_dst;
         #endregion
         public ChessBoard ChessBoard {
             get
@@ -124,46 +130,69 @@ namespace ChessCS
                 {
                     chessBoardControl.RemoveHighlightCells();
                     //remove hightlight in possible move
-                    if (possibleMoves != null)
+                    bool success = false;
+                    foreach (Move move in possibleMoves)
                     {
-                        foreach (Move move in possibleMoves)
+                        int xDst = move.X_Des;
+                        int yDst = move.Y_Des;
+                        //boardGUI[x_highlight, y_highlight].IsHighlight = false;
+                        if (row == xDst && col == yDst)
                         {
-                            int x_highlight = move.X_Des;
-                            int y_highlight = move.Y_Des;
-                            //boardGUI[x_highlight, y_highlight].IsHighlight = false;
-                            if (row == x_highlight && col == y_highlight)
-                            {
-                                //Player Move
-                                MakeMove(x_select, y_select, row, col);
-                                break;
-                            }
+                            //set animation
+                            //Player Move
+
+                            animationTimer.Interval = 200;
+                            animationTimer.Tick += new EventHandler(TimerEventProcessor);
+                            animationTimer.Start();
+                            animationTick = 0;
+                            x_move_src = x_select;
+                            y_move_src = y_select;
+                            x_move_dst = xDst;
+                            y_move_dst = yDst;
+                            this.chessBoardControl.SetAnimation(x_select, y_select, xDst, yDst);
+                            break;
                         }
-                        possibleMoves = null;
                     }
+                    CancelCurrentSelection();
+
+
 
                     //If a valid move, let computer take action
-                    if (x_select != row || y_select != col)
-                    {
-                        CancelCurrentSelection();
-                        //computer move
-                        thinkLabel.Text = "Computer is thinking....";
-                        Task<Move> computerMoveTask = Task.Run(() => chessBoard.GetAIMove());
+                    //if (x_select != row || y_select != col)
+                    //{
+                    //    CancelCurrentSelection();
+                    //    //computer move
+                    //    thinkLabel.Text = "Computer is thinking....";
+                    //    Task<Move> computerMoveTask = Task.Run(() => chessBoard.GetAIMove());
 
-                        //wait for Task
-                        await computerMoveTask;
-                        Move computerMove = computerMoveTask.Result;
-                        thinkLabel.Text = "";
-                        //
-                        MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
-                    }
-                    else
-                    {
-                        CancelCurrentSelection();
-                    }
+                    //    //wait for Task
+                    //    await computerMoveTask;
+                    //    Move computerMove = computerMoveTask.Result;
+                    //    thinkLabel.Text = "";
+                    //    //
+                    //    MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
+                    //}
                 }
             }
         }
-        
+        private void TimerEventProcessor(Object myObject,
+                                            EventArgs myEventArgs)
+        {
+            int SIZE = 60;
+            int dx = animationTick * (y_move_dst - y_move_src) * SIZE / 10;
+            int dy = animationTick * (x_move_dst - y_move_dst) * SIZE / 10;
+            int x_ani = y_move_src * SIZE - dx;
+            int y_ani = x_move_src * SIZE - dy;
+            this.chessBoardControl.UpdateAnimationPosition(x_ani,y_ani);
+            Console.WriteLine("Tick: " + animationTick);
+            animationTick++;
+            if (animationTick == 10)
+            {
+                animationTick = 0;
+                animationTimer.Stop();
+                MakeMove(x_move_src, y_move_src, x_move_dst, y_move_dst);
+            }
+        }
         private void CancelCurrentSelection()
         {
             isSelected = false;
@@ -177,8 +206,6 @@ namespace ChessCS
             moveHistory.Push(move);
 
             //Update GUI
-            //chessPiecesGUI[x_src, y_src].Piece = chessBoard.Board[x_src, y_src];
-            //chessPiecesGUI[x_des, y_des].Piece = chessBoard.Board[x_des, y_des];
             //Update info
             infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
             //

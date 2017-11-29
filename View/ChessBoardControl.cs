@@ -30,7 +30,10 @@ namespace ChessCS.View
             }
         }
         private List<Point> highlightedCells;
-        
+
+        private int x_src, y_src, x_dst, y_dst;
+        private int x_ani, y_ani;
+        private bool isAnimated;
         public ChessBoardControl(ChessBoard chessBoard)
         {
             this.Location = new Point(0, 30);
@@ -106,8 +109,29 @@ namespace ChessCS.View
                 string dir = Path.GetDirectoryName(Application.ExecutablePath);
                 string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
                 Image image = Image.FromFile(filename);
-                e.Graphics.DrawImage(image, col * SIZE, row * SIZE, SIZE, SIZE);
+                if (row == x_src &&col ==y_src)
+                {
+                    //draw animation
+                    e.Graphics.DrawImage(image, x_ani, y_ani, SIZE, SIZE);
+                } else
+                {
+                    e.Graphics.DrawImage(image, col * SIZE, row * SIZE, SIZE, SIZE);
+                }
+                
             }
+        }
+        public void SetAnimation(int x1,int y1, int x2,int y2)
+        {
+            this.x_src = x1;
+            this.y_src = y1;
+            this.x_dst = x2;
+            this.y_dst = y2;
+        }
+        public void UpdateAnimationPosition(int x_ani, int y_ani)
+        {
+            this.x_ani = x_ani;
+            this.y_ani = y_ani;
+            this.Invalidate();
         }
         private void PaintHighlighSquare(PaintEventArgs e)
         {
@@ -119,7 +143,7 @@ namespace ChessCS.View
                 {
                     int row = point.X;
                     int col = point.Y;
-                    e.Graphics.DrawRectangle(selPen, row * SIZE, col * SIZE, SIZE, SIZE);
+                    e.Graphics.DrawRectangle(selPen, col * SIZE, row * SIZE, SIZE, SIZE);
                 }
                 selPen.Dispose();
             }

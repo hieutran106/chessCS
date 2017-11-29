@@ -81,9 +81,6 @@
     <Compile Include="View\ChessBoardControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\ChessPieceGUI.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,9 +93,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Evaluation.cs" />
     <Compile Include="Search.cs" />
-    <Compile Include="View\SquareBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <EmbeddedResource Include="View\AddPieceForm.resx">
       <DependentUpon>AddPieceForm.cs</DependentUpon>
     </EmbeddedResource>
