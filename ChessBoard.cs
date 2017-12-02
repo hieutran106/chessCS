@@ -165,7 +165,7 @@ namespace ChessCS
             Board[move.X_Src, move.Y_Src] = '.';
             Board[move.X_Des, move.Y_Des] = move.Piece;
             //Update hash value
-
+            hash = zobrist.UpdateHash(hash, move);
             //
             if (move.PawnPromotion)
             {

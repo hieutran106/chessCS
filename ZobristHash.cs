@@ -23,7 +23,18 @@ namespace ChessCS
         public ulong UpdateHash(ulong oriHash, Move move)
         {
             ulong hash = oriHash;
+            //if capture XORing out the piece at dst
+            int index;
+            if (move.Capture!='.')
+            {
+                index = indexOf(move.Capture);
+                hash ^= table[move.Dst, index];
+            }
             //XORing out the piece at source
+            index = indexOf(move.Piece);
+            hash ^= table[move.Src, index];
+            //XORing in the piece at dst
+            hash ^= table[move.Dst, index];
             return hash;
         }
         public ulong Hash(char[,] board)
