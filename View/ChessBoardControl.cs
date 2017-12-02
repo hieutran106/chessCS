@@ -30,11 +30,13 @@ namespace ChessCS.View
             }
         }
         private List<Point> highlightedCells;
-
-        private int x_src, y_src, x_dst, y_dst;
-        private int x_ani, y_ani;
-        private bool isAnimated;
-
+        #region animation variables
+        public bool IsAnimated { get; set; }
+        private int x1, y1, x2, y2 = -1;
+        private Point currLoc;
+        private int speedX;
+        private int speedY;
+        #endregion
         SolidBrush whiteBrush = new SolidBrush(whiteColor);
         SolidBrush darkBrush = new SolidBrush(darkColor);
         Font font = new Font("Arial", 10);
@@ -72,61 +74,67 @@ namespace ChessCS.View
         {
             base.OnPaint(e);
             PaintTheBoard(e);
+            DrawChessPieces(e);
             PaintHighlighSquare(e);        
         }
         private void PaintTheBoard(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-
+            g.FillRectangle(whiteBrush, new Rectangle(0, 0, 8 * SIZE, 8 * SIZE));
             for (int i = 0; i < 64; i++)
             {
                 int col = i % 8;
                 int row = i / 8;
-                if ((col + row) % 2 == 0)
-                {
-                    //Draw white square
-                    g.FillRectangle(whiteBrush, new Rectangle(col * SIZE, row * SIZE, SIZE, SIZE));
-                    
-                }
-                else //otherwise, draw black square
+                if ((col + row) % 2 == 1)
                 {
                     g.FillRectangle(darkBrush, new Rectangle(col * SIZE, row * SIZE, SIZE, SIZE));
+
                 }
-                PaintCoordinate(e,font,row,col);
-                DrawChessPieces(e, row, col);             
+                PaintCoordinate(e,font,row,col);           
             }
 
         }
-        private void DrawChessPieces(PaintEventArgs e, int row, int col)
+        private void DrawChessPieces(PaintEventArgs e)
         {
-            char piece = ChessBoard.Board[row, col];
-            if (piece!='.')
+            Graphics g = e.Graphics;
+            for (int i = 0; i < 64; i++)
             {
-                string dir = Path.GetDirectoryName(Application.ExecutablePath);
-                string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
-                Image image = Image.FromFile(filename);
-                if (row == x_src &&col ==y_src)
+                int col = i % 8;
+                int row = i / 8;
+                char piece = ChessBoard.Board[row, col];
+                if (piece != '.')
                 {
-                    //draw animation
-                    e.Graphics.DrawImage(image, x_ani, y_ani, SIZE, SIZE);
-                } else
-                {
-                    e.Graphics.DrawImage(image, col * SIZE, row * SIZE, SIZE, SIZE);
+
+                    string dir = Path.GetDirectoryName(Application.ExecutablePath);
+                    string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
+                    Image image = Image.FromFile(filename);
+                    if (row == x1 && col == y1)
+                    {
+                        //draw animation
+                        //e.Graphics.DrawImage(image, x_ani, y_ani, SIZE, SIZE);
+                    }
+                    else
+                    {
+                        e.Graphics.DrawImage(image, col * SIZE, row * SIZE, SIZE, SIZE);
+                    }
+
                 }
-                
             }
+            //draw piece animation
+            
         }
-        public void SetAnimation(int x1,int y1, int x2,int y2)
+        public void SetAnimation(Point src, Point dst, int duration)
         {
-            this.x_src = x1;
-            this.y_src = y1;
-            this.x_dst = x2;
-            this.y_dst = y2;
+
+            this.IsAnimated = true;
+            speedX = (dst.Y - src.Y) * SIZE / duration;
+            speedY = (dst.X - src.X) * SIZE / duration;
+            currLoc = new Point(src.Y * SIZE, src.X * SIZE);
         }
         public void UpdateAnimationPosition(int x_ani, int y_ani)
         {
-            this.x_ani = x_ani;
-            this.y_ani = y_ani;
+            currLoc.X = currLoc.X + speedX;
+            currLoc.Y = currLoc.Y + speedY;
             this.Invalidate();
         }
         private void PaintHighlighSquare(PaintEventArgs e)
