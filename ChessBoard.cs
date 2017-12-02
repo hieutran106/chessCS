@@ -30,11 +30,17 @@ namespace ChessCS
         public bool ActiveColor { get; set; }
         public int FullMove { get; set; }
         public char[,] Board { get; set; }
-        
+
+        #region hash value
+        private ZobristHash zobrist;
+        private ulong hash;
+        #endregion
+
         public ChessBoard()
         {
             Board = new char[8, 8];
-            
+            zobrist = new ZobristHash();
+           
         }
         
         //Reset the board
@@ -45,6 +51,7 @@ namespace ChessCS
             Load(startingPosition);
             ActiveColor = WHITE;
             FullMove = 1;
+            hash = zobrist.Hash(Board);
         }
         //Returns the FEN string for the current board
         public string GetFEN()
@@ -123,6 +130,8 @@ namespace ChessCS
             int fullMove;
             int.TryParse(block[block.Length-1], out fullMove);
             FullMove = fullMove;
+            //hash
+            hash = zobrist.Hash(Board);
         }
         //Put a piece 
         public void Put(char p,string position)
@@ -155,6 +164,9 @@ namespace ChessCS
             //Update board data
             Board[move.X_Src, move.Y_Src] = '.';
             Board[move.X_Des, move.Y_Des] = move.Piece;
+            //Update hash value
+
+            //
             if (move.PawnPromotion)
             {
                 if (ActiveColor == WHITE)
