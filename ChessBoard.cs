@@ -33,7 +33,7 @@ namespace ChessCS
 
         #region hash value
         private ZobristHash zobrist;
-        private ulong hash;
+        public ulong Hash { get; set; }
         #endregion
 
         public ChessBoard()
@@ -51,7 +51,11 @@ namespace ChessCS
             Load(startingPosition);
             ActiveColor = WHITE;
             FullMove = 1;
-            hash = zobrist.Hash(Board);
+            UpdateHash();
+        }
+        public void UpdateHash()
+        {
+            Hash = zobrist.Hash(Board);
         }
         //Returns the FEN string for the current board
         public string GetFEN()
@@ -131,7 +135,7 @@ namespace ChessCS
             int.TryParse(block[block.Length-1], out fullMove);
             FullMove = fullMove;
             //hash
-            hash = zobrist.Hash(Board);
+            UpdateHash();
         }
         //Put a piece 
         public void Put(char p,string position)
@@ -165,7 +169,7 @@ namespace ChessCS
             Board[move.X_Src, move.Y_Src] = '.';
             Board[move.X_Des, move.Y_Des] = move.Piece;
             //Update hash value
-            hash = zobrist.UpdateHash(hash, move);
+            Hash = zobrist.UpdateHash(Hash, move);
             //
             if (move.PawnPromotion)
             {

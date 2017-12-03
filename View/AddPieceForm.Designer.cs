@@ -31,15 +31,16 @@
             this.addBtn = new System.Windows.Forms.Button();
             this.cancelBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.pawnRBtn = new System.Windows.Forms.RadioButton();
-            this.rookRBtn = new System.Windows.Forms.RadioButton();
-            this.knightRBtn = new System.Windows.Forms.RadioButton();
-            this.bishopRBtn = new System.Windows.Forms.RadioButton();
-            this.queenRBtn = new System.Windows.Forms.RadioButton();
             this.kingRBtn = new System.Windows.Forms.RadioButton();
-            this.blackRBtn = new System.Windows.Forms.RadioButton();
+            this.queenRBtn = new System.Windows.Forms.RadioButton();
+            this.bishopRBtn = new System.Windows.Forms.RadioButton();
+            this.knightRBtn = new System.Windows.Forms.RadioButton();
+            this.rookRBtn = new System.Windows.Forms.RadioButton();
+            this.pawnRBtn = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.whiteRBtn = new System.Windows.Forms.RadioButton();
+            this.blackRBtn = new System.Windows.Forms.RadioButton();
+            this.emptyRbtn = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -66,6 +67,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.emptyRbtn);
             this.groupBox1.Controls.Add(this.kingRBtn);
             this.groupBox1.Controls.Add(this.queenRBtn);
             this.groupBox1.Controls.Add(this.bishopRBtn);
@@ -79,16 +81,60 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Piece";
             // 
-            // groupBox2
+            // kingRBtn
             // 
-            this.groupBox2.Controls.Add(this.whiteRBtn);
-            this.groupBox2.Controls.Add(this.blackRBtn);
-            this.groupBox2.Location = new System.Drawing.Point(225, 13);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(153, 238);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Color";
+            this.kingRBtn.AutoSize = true;
+            this.kingRBtn.Location = new System.Drawing.Point(16, 135);
+            this.kingRBtn.Name = "kingRBtn";
+            this.kingRBtn.Size = new System.Drawing.Size(46, 17);
+            this.kingRBtn.TabIndex = 5;
+            this.kingRBtn.Text = "King";
+            this.kingRBtn.UseVisualStyleBackColor = true;
+            this.kingRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
+            // 
+            // queenRBtn
+            // 
+            this.queenRBtn.AutoSize = true;
+            this.queenRBtn.Location = new System.Drawing.Point(16, 112);
+            this.queenRBtn.Name = "queenRBtn";
+            this.queenRBtn.Size = new System.Drawing.Size(57, 17);
+            this.queenRBtn.TabIndex = 4;
+            this.queenRBtn.Text = "Queen";
+            this.queenRBtn.UseVisualStyleBackColor = true;
+            this.queenRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
+            // 
+            // bishopRBtn
+            // 
+            this.bishopRBtn.AutoSize = true;
+            this.bishopRBtn.Location = new System.Drawing.Point(16, 89);
+            this.bishopRBtn.Name = "bishopRBtn";
+            this.bishopRBtn.Size = new System.Drawing.Size(57, 17);
+            this.bishopRBtn.TabIndex = 3;
+            this.bishopRBtn.Text = "Bishop";
+            this.bishopRBtn.UseVisualStyleBackColor = true;
+            this.bishopRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
+            // 
+            // knightRBtn
+            // 
+            this.knightRBtn.AutoSize = true;
+            this.knightRBtn.Location = new System.Drawing.Point(16, 66);
+            this.knightRBtn.Name = "knightRBtn";
+            this.knightRBtn.Size = new System.Drawing.Size(55, 17);
+            this.knightRBtn.TabIndex = 2;
+            this.knightRBtn.Text = "Knight";
+            this.knightRBtn.UseVisualStyleBackColor = true;
+            this.knightRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
+            // 
+            // rookRBtn
+            // 
+            this.rookRBtn.AutoSize = true;
+            this.rookRBtn.Location = new System.Drawing.Point(16, 43);
+            this.rookRBtn.Name = "rookRBtn";
+            this.rookRBtn.Size = new System.Drawing.Size(51, 17);
+            this.rookRBtn.TabIndex = 1;
+            this.rookRBtn.Text = "Rook";
+            this.rookRBtn.UseVisualStyleBackColor = true;
+            this.rookRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
             // 
             // pawnRBtn
             // 
@@ -103,60 +149,27 @@
             this.pawnRBtn.UseVisualStyleBackColor = true;
             this.pawnRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
             // 
-            // rookRBtn
+            // groupBox2
             // 
-            this.rookRBtn.AutoSize = true;
-            this.rookRBtn.Location = new System.Drawing.Point(16, 43);
-            this.rookRBtn.Name = "rookRBtn";
-            this.rookRBtn.Size = new System.Drawing.Size(51, 17);
-            this.rookRBtn.TabIndex = 1;
-            this.rookRBtn.Text = "Rook";
-            this.rookRBtn.UseVisualStyleBackColor = true;
-            this.rookRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
+            this.groupBox2.Controls.Add(this.whiteRBtn);
+            this.groupBox2.Controls.Add(this.blackRBtn);
+            this.groupBox2.Location = new System.Drawing.Point(225, 13);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(153, 238);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Color";
             // 
-            // knightRBtn
+            // whiteRBtn
             // 
-            this.knightRBtn.AutoSize = true;
-            this.knightRBtn.Location = new System.Drawing.Point(16, 66);
-            this.knightRBtn.Name = "knightRBtn";
-            this.knightRBtn.Size = new System.Drawing.Size(55, 17);
-            this.knightRBtn.TabIndex = 2;
-            this.knightRBtn.Text = "Knight";
-            this.knightRBtn.UseVisualStyleBackColor = true;
-            this.knightRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
-            // 
-            // bishopRBtn
-            // 
-            this.bishopRBtn.AutoSize = true;
-            this.bishopRBtn.Location = new System.Drawing.Point(16, 89);
-            this.bishopRBtn.Name = "bishopRBtn";
-            this.bishopRBtn.Size = new System.Drawing.Size(57, 17);
-            this.bishopRBtn.TabIndex = 3;
-            this.bishopRBtn.Text = "Bishop";
-            this.bishopRBtn.UseVisualStyleBackColor = true;
-            this.bishopRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
-            // 
-            // queenRBtn
-            // 
-            this.queenRBtn.AutoSize = true;
-            this.queenRBtn.Location = new System.Drawing.Point(16, 112);
-            this.queenRBtn.Name = "queenRBtn";
-            this.queenRBtn.Size = new System.Drawing.Size(57, 17);
-            this.queenRBtn.TabIndex = 4;
-            this.queenRBtn.Text = "Queen";
-            this.queenRBtn.UseVisualStyleBackColor = true;
-            this.queenRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
-            // 
-            // kingRBtn
-            // 
-            this.kingRBtn.AutoSize = true;
-            this.kingRBtn.Location = new System.Drawing.Point(16, 135);
-            this.kingRBtn.Name = "kingRBtn";
-            this.kingRBtn.Size = new System.Drawing.Size(46, 17);
-            this.kingRBtn.TabIndex = 5;
-            this.kingRBtn.Text = "King";
-            this.kingRBtn.UseVisualStyleBackColor = true;
-            this.kingRBtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
+            this.whiteRBtn.AutoSize = true;
+            this.whiteRBtn.Location = new System.Drawing.Point(25, 43);
+            this.whiteRBtn.Name = "whiteRBtn";
+            this.whiteRBtn.Size = new System.Drawing.Size(53, 17);
+            this.whiteRBtn.TabIndex = 7;
+            this.whiteRBtn.Text = "White";
+            this.whiteRBtn.UseVisualStyleBackColor = true;
+            this.whiteRBtn.CheckedChanged += new System.EventHandler(this.color_CheckedChanged);
             // 
             // blackRBtn
             // 
@@ -171,16 +184,16 @@
             this.blackRBtn.UseVisualStyleBackColor = true;
             this.blackRBtn.CheckedChanged += new System.EventHandler(this.color_CheckedChanged);
             // 
-            // whiteRBtn
+            // emptyRbtn
             // 
-            this.whiteRBtn.AutoSize = true;
-            this.whiteRBtn.Location = new System.Drawing.Point(25, 43);
-            this.whiteRBtn.Name = "whiteRBtn";
-            this.whiteRBtn.Size = new System.Drawing.Size(53, 17);
-            this.whiteRBtn.TabIndex = 7;
-            this.whiteRBtn.Text = "White";
-            this.whiteRBtn.UseVisualStyleBackColor = true;
-            this.whiteRBtn.CheckedChanged += new System.EventHandler(this.color_CheckedChanged);
+            this.emptyRbtn.AutoSize = true;
+            this.emptyRbtn.Location = new System.Drawing.Point(16, 158);
+            this.emptyRbtn.Name = "emptyRbtn";
+            this.emptyRbtn.Size = new System.Drawing.Size(54, 17);
+            this.emptyRbtn.TabIndex = 6;
+            this.emptyRbtn.Text = "Empty";
+            this.emptyRbtn.UseVisualStyleBackColor = true;
+            this.emptyRbtn.CheckedChanged += new System.EventHandler(this.pieceType_CheckedChanged);
             // 
             // AddPieceForm
             // 
@@ -215,5 +228,6 @@
         private System.Windows.Forms.RadioButton rookRBtn;
         private System.Windows.Forms.RadioButton whiteRBtn;
         private System.Windows.Forms.RadioButton blackRBtn;
+        private System.Windows.Forms.RadioButton emptyRbtn;
     }
 }

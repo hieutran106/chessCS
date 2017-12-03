@@ -58,6 +58,9 @@ namespace ChessCS
             } else if (sender == kingRBtn)
             {
                 piece = 'k';
+            } else if (sender == emptyRbtn)
+            {
+                piece = '.';
             }
         }
         //change color based on option chosen by sender

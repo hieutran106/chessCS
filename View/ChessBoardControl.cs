@@ -30,13 +30,6 @@ namespace ChessCS.View
             }
         }
         private List<Point> highlightedCells;
-        #region animation variables
-        public bool IsAnimated { get; set; }
-        private int x1, y1, x2, y2 = -1;
-        private Point currLoc;
-        private int speedX;
-        private int speedY;
-        #endregion
         SolidBrush whiteBrush = new SolidBrush(whiteColor);
         SolidBrush darkBrush = new SolidBrush(darkColor);
         Font font = new Font("Arial", 10);
@@ -108,35 +101,17 @@ namespace ChessCS.View
                     string dir = Path.GetDirectoryName(Application.ExecutablePath);
                     string filename = Path.Combine(dir, "img\\" + (char.IsUpper(piece) ? "w" : "b") + piece.ToString().ToUpper() + ".png");
                     Image image = Image.FromFile(filename);
-                    if (row == x1 && col == y1)
-                    {
-                        //draw animation
-                        //e.Graphics.DrawImage(image, x_ani, y_ani, SIZE, SIZE);
-                    }
-                    else
-                    {
+                    
+                    
                         e.Graphics.DrawImage(image, col * SIZE, row * SIZE, SIZE, SIZE);
-                    }
+                    
 
                 }
             }
             //draw piece animation
             
         }
-        public void SetAnimation(Point src, Point dst, int duration)
-        {
 
-            this.IsAnimated = true;
-            speedX = (dst.Y - src.Y) * SIZE / duration;
-            speedY = (dst.X - src.X) * SIZE / duration;
-            currLoc = new Point(src.Y * SIZE, src.X * SIZE);
-        }
-        public void UpdateAnimationPosition(int x_ani, int y_ani)
-        {
-            currLoc.X = currLoc.X + speedX;
-            currLoc.Y = currLoc.Y + speedY;
-            this.Invalidate();
-        }
         private void PaintHighlighSquare(PaintEventArgs e)
         {
             if (highlightedCells.Count!=0)

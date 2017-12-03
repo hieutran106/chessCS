@@ -60,8 +60,9 @@ namespace ChessCS
         public void Put_Piece(int x,int y, char piece)
         {
             chessBoard.Board[x, y] = piece;
-            //update GUI
-            //chessPiecesGUI[x, y].Piece = piece;
+            //rehash
+            chessBoard.UpdateHash();
+            chessBoardControl.Invalidate();
         }
         private List<Move> PossibleMove(int x,int y)
         {
@@ -93,13 +94,12 @@ namespace ChessCS
             return moves;
 
         }
-        private async void ChessBoardControl_Click(object sender, MouseEventArgs e)
+        private void ChessBoardControl_Click(object sender, MouseEventArgs e)
         {
+            int col = e.Location.X / ChessBoardControl.SIZE;
+            int row = e.Location.Y / ChessBoardControl.SIZE;
             if (e.Button == MouseButtons.Left)
             {
-                
-                int col = e.Location.X / ChessBoardControl.SIZE;
-                int row = e.Location.Y / ChessBoardControl.SIZE;
                 Console.WriteLine($"Click at [{row},{col}]");
                 if (chessBoard.Board[row, col] != '.' && isSelected == false) //Click on a chess piece
                 {
@@ -138,6 +138,11 @@ namespace ChessCS
                     }
                     CancelCurrentSelection();
                 }
+            } else
+            {
+                //Right click
+                AddPieceForm form = new AddPieceForm(row, col, this);
+                form.Show();
             }
         }
         
@@ -164,6 +169,7 @@ namespace ChessCS
             {
                 moveHistoryTextBox.AppendText($"  {move}");
             }
+            return;
             if (this.chessBoard.ActiveColor==ChessBoard.BLACK)
             {
                 //Computer turn
@@ -179,48 +185,27 @@ namespace ChessCS
             }
 
         }
-        //Context Menu
-        private void AddPieceItem_Click(object sender, EventArgs e)
-        {
-            //MenuItem menuItem = sender as MenuItem;
-
-            //if (menuItem != null)
-            //{
-            //    ContextMenu contextMenu = menuItem.GetContextMenu();
-            //    //Get picture box
-            //    Control sourceControl = contextMenu.SourceControl;
-            //    SquareBox squareBox = sourceControl as SquareBox;
-            //    if (squareBox != null)
-            //    {
-            //        //remove piece
-            //        //get position
-            //        int x = squareBox.X;
-            //        int y = squareBox.Y;
-            //        //update
-            //        AddPieceForm form = new AddPieceForm(x,y,this);
-            //        form.Show();
-            //    }
-            //}
-
-        }
+        
 
         private void getFENBtn_Click(object sender, EventArgs e)
         {
+            logTextBox.Clear();
             logTextBox.AppendText(chessBoard.GetFEN());
+            logTextBox.AppendText("\r\nHash: " + chessBoard.Hash);
         }
 
         private void coordinateToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             bool isChecked = coordinateToolStripMenuItem.Checked;
-            //for (int i = 0; i < 8; i++)
-            //    for (int j = 0; j < 8; j++)
-            //        boardGUI[i, j].ShowCoordinate = isChecked;
+            chessBoardControl.ShowCoordinate = isChecked;
+
         }
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             chessBoard.Reset();
-            chessBoard.Load("rnbqk2r/ppp1bppp/4pn2/3p4/3P4/N1P1B3/PP2PPPP/R2QKBNR w KQkq d6 0 5");
+            chessBoardControl.Invalidate();
+            //chessBoard.Load("rnbqk2r/ppp1bppp/4pn2/3p4/3P4/N1P1B3/PP2PPPP/R2QKBNR w KQkq d6 0 5");
             //reset
             isSelected=false;
             x_select = -1;
@@ -254,31 +239,6 @@ namespace ChessCS
                 moveHistoryTextBox.Text = text.ToString();
                 //moveHistoryTextBox.AppendText($"  {move}");
             }
-        }
-
-        private void RemovePieceItem_Click(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-          
-            //if (menuItem!=null)
-            //{
-            //    ContextMenu contextMenu = menuItem.GetContextMenu();
-            //    //Get picture box
-            //    Control sourceControl = contextMenu.SourceControl;
-            //    SquareBox squareBox = sourceControl as SquareBox;
-            //    if (squareBox!=null)
-            //    {
-            //        //remove piece
-            //        //get position
-            //        int x = squareBox.X;
-            //        int y = squareBox.Y;
-            //        //remove a chess piece
-            //        Put_Piece(x, y, '.');
-            //    }
-                
-                
-            //}
-            
         }
 
     }
