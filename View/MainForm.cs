@@ -157,7 +157,7 @@ namespace ChessCS
             Move move = chessBoard.GetMove(x_src, y_src, x_des, y_des);
             chessBoard.MakeMove(move);
             moveHistory.Push(move);
-
+            chessBoardControl.Invalidate();
             //Update GUI
             //Update info
             infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";

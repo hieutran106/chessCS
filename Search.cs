@@ -12,7 +12,7 @@ namespace ChessCS
         public static bool WHITE = true;
 
 
-        static int globalDepth = 2;
+        static int globalDepth = 4;
         private Evaluation evaluation;
         private ChessBoard examinedBoard;
         public Search()
@@ -25,7 +25,7 @@ namespace ChessCS
             Search search = new Search();
             search.examinedBoard = examinedBoard.FastCopy();
             int color = (player == BLACK) ? 1 : -1;
-            MNResult bestResult = search.RootNegaMax(2, -10000, 10000, color, false);
+            MNResult bestResult = search.RootNegaMax(4, -10000, 10000, color, false);
             Console.WriteLine("Best value:" + bestResult.Value);
             return bestResult.Move;
 
@@ -65,32 +65,32 @@ namespace ChessCS
         {
             if (depth == 0)
             {
-                int score= Evaluate(color, debug);
+                int score= Evaluate(color, debug,depth);
                 return score;
             }
             List<Move> possibleMoves = null;
             possibleMoves = (debug)?DebugLegalMoves(): examinedBoard.LegalMovesForPlayer(color);
             if (possibleMoves.Count==0)
             {
-                int score = Evaluate(color, debug);
+                int score = Evaluate(color, debug,depth);
                 return score;
             }
             int bestValue = Int32.MinValue;
             foreach (Move eleMove in possibleMoves) {
                 examinedBoard.MakeMove(eleMove);
                 //Print information
-                Console.Write(new string('\t', globalDepth - depth) + eleMove.ToString());
-                if  ((globalDepth-depth)!=1)
-                {
-                    Console.WriteLine();
-                }
+                Console.Write("\n"+new string('\t', globalDepth - depth) + eleMove.ToString());
+                //if  (depth!=1)
+                //{
+                //    Console.WriteLine();
+                //}
                 int value = -Negamax(depth - 1, -beta, -alpha, -color,debug);     
                 examinedBoard.UndoMove(eleMove);
                 bestValue = Math.Max(alpha, value);
                 alpha = Math.Max(alpha, value);
                 if (alpha >= beta)
                 {
-                    Console.WriteLine(new string('\t', globalDepth - depth) + "Cut off");
+                    Console.Write(new string('\t', globalDepth - depth) + "Cut off");
                     break;
                 }
                     
@@ -109,12 +109,14 @@ namespace ChessCS
             }
             return possibleMoves;
         }
-        private int Evaluate(int color, bool debug)
+        private int Evaluate(int color, bool debug, int depthleft)
         {
             int score;
             if (!debug)
             {
-                score = -color * evaluation.EvaluateBoard(this.examinedBoard);
+                score = evaluation.EvaluateBoard(this.examinedBoard) + (globalDepth - depthleft) * 10;
+                score = -color * score;
+
                 Console.WriteLine(" Eva:" + score);
             }
             else
