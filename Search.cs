@@ -114,7 +114,7 @@ namespace ChessCS
             int score;
             if (!debug)
             {
-                score = color * evaluation.EvaluateBoard(this.examinedBoard);
+                score = -color * evaluation.EvaluateBoard(this.examinedBoard);
                 Console.WriteLine(" Eva:" + score);
             }
             else
