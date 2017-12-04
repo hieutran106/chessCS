@@ -12,7 +12,7 @@ namespace ChessCS
         public static bool WHITE = true;
 
 
-        static int globalDepth = 4;
+        static int globalDepth = 2;
         private Evaluation evaluation;
         private ChessBoard examinedBoard;
         public Search()
@@ -24,10 +24,113 @@ namespace ChessCS
         {
             Search search = new Search();
             search.examinedBoard = examinedBoard.FastCopy();
-            MNResult result = search.AlphaBeta(4, 1000000, -1000000, null, player,debug);
-            return result.Move;
+            int color = (player == BLACK) ? 1 : -1;
+            MNResult bestResult = search.RootNegaMax(2, -10000, 10000, color, false);
+            Console.WriteLine("Best value:" + bestResult.Value);
+            return bestResult.Move;
 
         }
+        private MNResult RootNegaMax(int depth, int alpha, int beta, int color, bool debug)
+        {         
+            List<Move> possibleMoves = null;
+            possibleMoves = (debug) ? DebugLegalMoves() : examinedBoard.LegalMovesForPlayer(color);
+  
+            int bestValue = Int32.MinValue;
+            Move bestMove = null;
+            foreach (Move eleMove in possibleMoves)
+            {
+                examinedBoard.MakeMove(eleMove);
+                //Print information
+                Console.WriteLine(new string('\t', globalDepth - depth) + eleMove.ToString());
+                int value = -Negamax(depth - 1, -beta, -alpha, -color, debug);               
+                examinedBoard.UndoMove(eleMove);
+
+                if (value>bestValue)
+                {
+                    bestValue = value;
+                    bestMove = eleMove;
+                }
+                
+                alpha = Math.Max(alpha, value);
+                if (alpha >= beta)
+                {
+                    Console.WriteLine(new string('\t', globalDepth - depth) + "Cut off");
+                    break;
+                }
+                    
+            }
+            return new MNResult(bestMove, bestValue);
+        }
+        private int Negamax(int depth, int alpha, int beta, int color, bool debug)
+        {
+            if (depth == 0)
+            {
+                int score= Evaluate(color, debug);
+                return score;
+            }
+            List<Move> possibleMoves = null;
+            possibleMoves = (debug)?DebugLegalMoves(): examinedBoard.LegalMovesForPlayer(color);
+            if (possibleMoves.Count==0)
+            {
+                int score = Evaluate(color, debug);
+                return score;
+            }
+            int bestValue = Int32.MinValue;
+            foreach (Move eleMove in possibleMoves) {
+                examinedBoard.MakeMove(eleMove);
+                //Print information
+                Console.Write(new string('\t', globalDepth - depth) + eleMove.ToString());
+                if  ((globalDepth-depth)!=1)
+                {
+                    Console.WriteLine();
+                }
+                int value = -Negamax(depth - 1, -beta, -alpha, -color,debug);     
+                examinedBoard.UndoMove(eleMove);
+                bestValue = Math.Max(alpha, value);
+                alpha = Math.Max(alpha, value);
+                if (alpha >= beta)
+                {
+                    Console.WriteLine(new string('\t', globalDepth - depth) + "Cut off");
+                    break;
+                }
+                    
+            }
+            return bestValue;
+        }
+        private List<Move> DebugLegalMoves()
+        {
+            Console.Write("How many moves are there:");
+            int count = Convert.ToInt32(Console.ReadLine());
+            List<Move> possibleMoves = new List<Move>();
+            for (int i = 0; i < count; i++)
+            {
+                Move debugMove = new Move(1, 4, 3, 4, this.examinedBoard);
+                possibleMoves.Add(debugMove);
+            }
+            return possibleMoves;
+        }
+        private int Evaluate(int color, bool debug)
+        {
+            int score;
+            if (!debug)
+            {
+                score = color * evaluation.EvaluateBoard(this.examinedBoard);
+                Console.WriteLine(" Eva:" + score);
+            }
+            else
+            {
+                Console.Write("What is the score:");
+                score = Convert.ToInt32(Console.ReadLine());
+            }
+
+            return score;
+        }
+
+
+
+
+
+
         private MNResult AlphaBeta(int depth, int beta, int alpha, Move move, bool player,bool debug=false)
         {
             //BLACK is max player

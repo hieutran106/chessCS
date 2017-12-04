@@ -30,11 +30,16 @@ namespace ChessCS
                 index = indexOf(move.Capture);
                 hash ^= table[move.Dst, index];
             }
-            //XORing out the piece at source
+            
             index = indexOf(move.Piece);
-            hash ^= table[move.Src, index];
-            //XORing in the piece at dst
-            hash ^= table[move.Dst, index];
+            if (index!=-1)
+            {
+                //XORing out the piece at source
+                hash ^= table[move.Src, index];
+                //XORing in the piece at dst
+                hash ^= table[move.Dst, index];
+            }
+          
             return hash;
         }
         public ulong Hash(char[,] board)

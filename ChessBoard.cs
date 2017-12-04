@@ -228,6 +228,11 @@ namespace ChessCS
             
             return possibleMoves;
         }
+        public List<Move> LegalMovesForPlayer(int player)
+        {
+            bool color = (player == 1) ? BLACK : WHITE;
+            return PossibleMoves(color);
+        }
         private List<Move> PieceMoves(char piece, bool color,int i, int j)
         {
             List<Move> pieceMoves = null;
@@ -237,33 +242,27 @@ namespace ChessCS
                 {
                     case 'P':
                     case 'p':
-                        pieceMoves = Pawn.generateMove(i, j, this);
-                        Console.WriteLine($"Pawn move: {pieceMoves.Count}");
+                        pieceMoves = Pawn.generateMove(i, j, this);                       
                         break;
                     case 'R':
                     case 'r':
                         pieceMoves = Rook.generateMove(i, j, this);
-                        Console.WriteLine($"Rook move: {pieceMoves.Count}");
                         break;
                     case 'N':
                     case 'n':
                         pieceMoves = Knight.generateMove(i, j, this);
-                        Console.WriteLine($"Knight move: {pieceMoves.Count}");
                         break;
                     case 'B':
                     case 'b':
                         pieceMoves = Bishop.generateMove(i, j, this);
-                        Console.WriteLine($"Bishop move: {pieceMoves.Count}");
                         break;
                     case 'Q':
                     case 'q':
                         pieceMoves = Queen.generateMove(i, j, this);
-                        Console.WriteLine($"Queen move: {pieceMoves.Count}");
                         break;
                     case 'K':
                     case 'k':
                         pieceMoves = King.generateMove(i, j, this);
-                        Console.WriteLine($"King move: {pieceMoves.Count}");
                         break;
                     default:
                         break;
