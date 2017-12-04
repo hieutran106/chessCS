@@ -18,6 +18,7 @@ namespace ChessCS
         public char Piece { get; private set; }
         public char Capture { get; private set; }
         public bool PawnPromotion { get; set; }
+        //use for move ordering
         public int Value { get; set; }
         public Move(int x_src, int y_src, int x_dst, int y_dst, ChessBoard chessBoard)
         {
@@ -31,37 +32,70 @@ namespace ChessCS
             //
             Piece = chessBoard.Board[x_src, y_src];
             Capture = chessBoard.Board[x_dst, y_dst];
-            if (chessBoard.Board[x_src,y_src]=='P')
+            if (chessBoard.Board[x_src, y_src] == 'P')
             {
-                if (x_dst==0)
+                if (x_dst == 0)
                 {
                     PawnPromotion = true;
                 }
-            } else if (chessBoard.Board[x_src,y_src]=='p')
+            }
+            else if (chessBoard.Board[x_src, y_src] == 'p')
             {
-                if (x_dst==7)
+                if (x_dst == 7)
                 {
                     PawnPromotion = true;
                 }
             }
         }
-
+        public void Evaluate()
+        {
+            int score = 0;
+            switch (char.ToUpper(Piece))
+            {
+                case 'P':
+                    score = 1;
+                    break;
+                case 'N':
+                    score = 3;
+                    break;
+                case 'B':
+                    score = 3;
+                    break;
+                case 'R':
+                    score = 5;
+                    break;
+                case 'Q':
+                    score = 9;
+                    break;
+                case 'K':
+                    score = 90;
+                    break;
+            }
+            if (char.IsUpper(Piece))
+            {
+                Value = score;
+            } else
+            {
+                Value = score;
+            }
+        }
         public static string PositionFromCoordinate(int x, int y)
         {
-            
-                StringBuilder position = new StringBuilder(2);
-                position.Append((char)(x + 97));
-                position.Append((char)(56 - y));
-                return position.ToString();
+
+            StringBuilder position = new StringBuilder(2);
+            position.Append((char)(x + 97));
+            position.Append((char)(56 - y));
+            return position.ToString();
         }
         public override string ToString()
         {
             StringBuilder move = new StringBuilder(40);
             move.Append($"{Piece}:[{X_Src},{Y_Src}]-[{X_Des},{Y_Des}]");
-            if (Capture=='.')
+            if (Capture == '.')
             {
                 move.Append(" --");
-            } else
+            }
+            else
             {
                 move.Append($" x{Capture}");
             }

@@ -12,7 +12,7 @@ namespace ChessCS
         public static bool WHITE = true;
 
 
-        static int globalDepth = 4;
+        static int globalDepth = 2;
         private Evaluation evaluation;
         private ChessBoard examinedBoard;
         public Search()
@@ -25,7 +25,7 @@ namespace ChessCS
             Search search = new Search();
             search.examinedBoard = examinedBoard.FastCopy();
             int color = (player == BLACK) ? 1 : -1;
-            MNResult bestResult = search.RootNegaMax(4, -10000, 10000, color, false);
+            MNResult bestResult = search.RootNegaMax(2, -10000, 10000, color, false);
             Console.WriteLine("Best value:" + bestResult.Value);
             return bestResult.Move;
 
@@ -37,6 +37,9 @@ namespace ChessCS
   
             int bestValue = Int32.MinValue;
             Move bestMove = null;
+            //sort move
+            possibleMoves.Sort();
+            //
             foreach (Move eleMove in possibleMoves)
             {
                 examinedBoard.MakeMove(eleMove);
@@ -76,6 +79,9 @@ namespace ChessCS
                 return score;
             }
             int bestValue = Int32.MinValue;
+            //sort move
+            possibleMoves.Sort();
+
             foreach (Move eleMove in possibleMoves) {
                 examinedBoard.MakeMove(eleMove);
                 //Print information
