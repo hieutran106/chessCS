@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessCS
 {
-    public class Move
+    public class Move : IComparable<Move>
     {
         public int X_Des { get; set; }
         public int Y_Des { get; set; }
@@ -18,6 +18,7 @@ namespace ChessCS
         public char Piece { get; private set; }
         public char Capture { get; private set; }
         public bool PawnPromotion { get; set; }
+        public int Value { get; set; }
         public Move(int x_src, int y_src, int x_dst, int y_dst, ChessBoard chessBoard)
         {
             X_Src = x_src;
@@ -82,6 +83,11 @@ namespace ChessCS
                 PawnPromotion == other.PawnPromotion)
                 return true;
             else return false;
+        }
+
+        public int CompareTo(Move other)
+        {
+            return this.Value.CompareTo(other.Value);
         }
     }
 }

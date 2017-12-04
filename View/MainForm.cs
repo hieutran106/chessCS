@@ -169,7 +169,7 @@ namespace ChessCS
             {
                 moveHistoryTextBox.AppendText($"  {move}");
             }
-            return;
+
             if (this.chessBoard.ActiveColor==ChessBoard.BLACK)
             {
                 //Computer turn
