@@ -36,6 +36,8 @@
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coordinateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableAIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugMODEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.thinkLabel = new System.Windows.Forms.Label();
@@ -102,18 +104,38 @@
             // displayToolStripMenuItem
             // 
             this.displayToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.coordinateToolStripMenuItem});
+            this.coordinateToolStripMenuItem,
+            this.enableAIToolStripMenuItem,
+            this.debugMODEToolStripMenuItem});
             this.displayToolStripMenuItem.Name = "displayToolStripMenuItem";
-            this.displayToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.displayToolStripMenuItem.Text = "Display";
+            this.displayToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.displayToolStripMenuItem.Text = "Config";
             // 
             // coordinateToolStripMenuItem
             // 
             this.coordinateToolStripMenuItem.CheckOnClick = true;
             this.coordinateToolStripMenuItem.Name = "coordinateToolStripMenuItem";
-            this.coordinateToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.coordinateToolStripMenuItem.Text = "Coordinate";
-            this.coordinateToolStripMenuItem.CheckedChanged += new System.EventHandler(this.coordinateToolStripMenuItem_CheckedChanged);
+            this.coordinateToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.coordinateToolStripMenuItem.Text = "Show Coordinate";
+            this.coordinateToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ToolStripMenuItem_CheckedChanged);
+            // 
+            // enableAIToolStripMenuItem
+            // 
+            this.enableAIToolStripMenuItem.Checked = true;
+            this.enableAIToolStripMenuItem.CheckOnClick = true;
+            this.enableAIToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.enableAIToolStripMenuItem.Name = "enableAIToolStripMenuItem";
+            this.enableAIToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.enableAIToolStripMenuItem.Text = "Enable AI";
+            this.enableAIToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ToolStripMenuItem_CheckedChanged);
+            // 
+            // debugMODEToolStripMenuItem
+            // 
+            this.debugMODEToolStripMenuItem.CheckOnClick = true;
+            this.debugMODEToolStripMenuItem.Name = "debugMODEToolStripMenuItem";
+            this.debugMODEToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.debugMODEToolStripMenuItem.Text = "Debug MODE";
+            this.debugMODEToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ToolStripMenuItem_CheckedChanged);
             // 
             // aboutToolStripMenuItem
             // 
@@ -197,6 +219,8 @@
         private System.Windows.Forms.Button backBtn;
         private System.Windows.Forms.ToolStripMenuItem newGameToolStripMenuItem;
         private System.Windows.Forms.Label thinkLabel;
+        private System.Windows.Forms.ToolStripMenuItem enableAIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugMODEToolStripMenuItem;
     }
 }
 

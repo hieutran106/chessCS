@@ -27,6 +27,11 @@ namespace ChessCS
         #region GUI
         private ChessBoardControl chessBoardControl;
         #endregion
+        #region config
+        bool showCoordinate;
+        bool isDebugMode;
+        bool isEnabledAI;
+        #endregion
         public ChessBoard ChessBoard {
             get
             {
@@ -48,7 +53,13 @@ namespace ChessCS
         public MainForm(ChessBoard chessBoard)
         {
             InitializeComponent();
+            //START - Config
+            showCoordinate = coordinateToolStripMenuItem.Checked;
+            isDebugMode = debugMODEToolStripMenuItem.Checked;
+            isEnabledAI = enableAIToolStripMenuItem.Checked;
+            //END - Config
             chessBoardControl = new ChessBoardControl(chessBoard);
+            chessBoardControl.ShowCoordinate = showCoordinate;
             chessBoardControl.MouseUp += new MouseEventHandler(this.ChessBoardControl_Click);
             this.Controls.Add(chessBoardControl);
             this.ChessBoard = chessBoard;
@@ -172,7 +183,8 @@ namespace ChessCS
             {
                 moveHistoryTextBox.AppendText($"  {move}");
             }
-
+            if (!isEnabledAI)
+                return;
             if (this.chessBoard.ActiveColor==ChessBoard.BLACK)
             {
                 //Computer turn
@@ -199,11 +211,20 @@ namespace ChessCS
             logTextBox.AppendText("\r\nHash: " + chessBoard.Hash);
         }
 
-        private void coordinateToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void ToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            bool isChecked = coordinateToolStripMenuItem.Checked;
-            chessBoardControl.ShowCoordinate = isChecked;
-
+            if (sender==coordinateToolStripMenuItem)
+            {
+                bool isChecked = coordinateToolStripMenuItem.Checked;
+                chessBoardControl.ShowCoordinate = isChecked;
+            } else if (sender==enableAIToolStripMenuItem)
+            {
+                isEnabledAI = !isEnabledAI;
+            } else if (sender==debugMODEToolStripMenuItem)
+            {
+                isDebugMode = !isDebugMode;
+            }
+            
         }
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
