@@ -20,6 +20,7 @@ namespace ChessCS
         private bool isSelected;
         private int x_select, y_select;
         private List<Move> possibleMoves;
+        private bool isSearchingForBestMove;
         //history
         private Stack<Move> moveHistory;
        
@@ -96,6 +97,8 @@ namespace ChessCS
         }
         private void ChessBoardControl_Click(object sender, MouseEventArgs e)
         {
+            if (isSearchingForBestMove)
+                return;
             int col = e.Location.X / ChessBoardControl.SIZE;
             int row = e.Location.Y / ChessBoardControl.SIZE;
             if (e.Button == MouseButtons.Left)
@@ -174,12 +177,14 @@ namespace ChessCS
             {
                 //Computer turn
                 thinkLabel.Text = "Computer is thinking....";
+                isSearchingForBestMove = true;
                 Task<Move> computerMoveTask = Task.Run(() => chessBoard.GetAIMove());
 
                 //wait for Task
                 await computerMoveTask;
                 Move computerMove = computerMoveTask.Result;
                 thinkLabel.Text = "";
+                isSearchingForBestMove = false;
                 //
                 MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
             }
@@ -220,8 +225,7 @@ namespace ChessCS
             chessBoard.UndoMove(move);
 
             //Update GUI
-            //chessPiecesGUI[move.X_Src, move.Y_Src].Piece = chessBoard.Board[move.X_Src, move.Y_Src];
-            //chessPiecesGUI[move.X_Des, move.Y_Des].Piece = chessBoard.Board[move.X_Des, move.Y_Des];
+            chessBoardControl.Invalidate();
             //Update info
             infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
             //remove text in rich text box
@@ -231,13 +235,11 @@ namespace ChessCS
             {
                 text.Remove(text.Length - 24, 24);
                 moveHistoryTextBox.Text = text.ToString();
-                //moveHistoryTextBox.AppendText($"\n{chessBoard.Fullmove}. {move}");
             }
             else
             {
                 text.Remove(text.Length - 22, 22);
                 moveHistoryTextBox.Text = text.ToString();
-                //moveHistoryTextBox.AppendText($"  {move}");
             }
         }
 

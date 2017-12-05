@@ -55,7 +55,7 @@ namespace ChessCS
                     PawnPromotion = true;
                 }
             }
-            Evaluate();
+            
         }
         public void Evaluate()
         {
