@@ -21,6 +21,7 @@ namespace ChessCS
             //cb.Load("8/6P1/p7/8/8/2n5/4P3/5N2 w 3");
             //cb.Load("r7/1r6/8/8/8/8/K7/8 w 3");
             //cb.Load("2r5/1r6/8/8/2N5/8/8/8 w 3");
+            //cb.Load("8/3q4/4P3/1p3k2/4R1P1/8/R7/8 w 3");
             //Show main form
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -10,7 +10,7 @@ namespace ChessCS
     {
         public static bool BLACK = false;
         public static bool WHITE = true;
-
+        private int visitedNode = 0;
 
         static int globalDepth = 2;
         private Evaluation evaluation;
@@ -26,7 +26,7 @@ namespace ChessCS
             search.examinedBoard = examinedBoard.FastCopy();
             int color = (player == BLACK) ? 1 : -1;
             MNResult bestResult = search.RootNegaMax(2, -10000, 10000, color, false);
-            Console.WriteLine("Best value:" + bestResult.Value);
+            Console.WriteLine("Best value:" + bestResult.Value+" Visited node:"+search.visitedNode);
             return bestResult.Move;
 
         }
@@ -42,6 +42,7 @@ namespace ChessCS
             //
             foreach (Move eleMove in possibleMoves)
             {
+                visitedNode++;
                 examinedBoard.MakeMove(eleMove);
                 //Print information
                 Console.WriteLine(new string('\t', globalDepth - depth) + eleMove.ToString());
@@ -81,8 +82,8 @@ namespace ChessCS
             int bestValue = Int32.MinValue;
             //sort move
             possibleMoves.Sort();
-
             foreach (Move eleMove in possibleMoves) {
+                visitedNode++;
                 examinedBoard.MakeMove(eleMove);
                 //Print information
                 Console.Write("\n"+new string('\t', globalDepth - depth) + eleMove.ToString());

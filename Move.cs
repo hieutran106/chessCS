@@ -20,6 +20,15 @@ namespace ChessCS
         public bool PawnPromotion { get; set; }
         //use for move ordering
         public int Value { get; set; }
+        private static Dictionary<char, int> mvvLva = new Dictionary<char, int>()
+            {
+                { 'P',100},
+                { 'N',200},
+                { 'B',200},
+                { 'R',300},
+                { 'Q',500},
+                { 'K',600},
+            }; // Most value victim, least value attacker
         public Move(int x_src, int y_src, int x_dst, int y_dst, ChessBoard chessBoard)
         {
             X_Src = x_src;
@@ -46,38 +55,22 @@ namespace ChessCS
                     PawnPromotion = true;
                 }
             }
+            Evaluate();
         }
         public void Evaluate()
         {
+            this.Value = EvaluateMvvLva();
+        }
+        private int EvaluateMvvLva()
+        {
             int score = 0;
-            switch (char.ToUpper(Piece))
+            if (Capture != '.')
             {
-                case 'P':
-                    score = 1;
-                    break;
-                case 'N':
-                    score = 3;
-                    break;
-                case 'B':
-                    score = 3;
-                    break;
-                case 'R':
-                    score = 5;
-                    break;
-                case 'Q':
-                    score = 9;
-                    break;
-                case 'K':
-                    score = 90;
-                    break;
+
+                score = Move.mvvLva[char.ToUpper(Capture)] + 6 - Move.mvvLva[char.ToUpper(Piece)] / 100;
+
             }
-            if (char.IsUpper(Piece))
-            {
-                Value = score;
-            } else
-            {
-                Value = score;
-            }
+            return score;
         }
         public static string PositionFromCoordinate(int x, int y)
         {
@@ -104,6 +97,7 @@ namespace ChessCS
                 move.Append("=Q");
             }
             else move.Append("  ");
+            move.Append(" Val:" + Value);
             return move.ToString();
         }
         public bool Equals(Move other)
@@ -121,7 +115,8 @@ namespace ChessCS
 
         public int CompareTo(Move other)
         {
-            return this.Value.CompareTo(other.Value);
+            
+            return other.Value.CompareTo(this.Value);
         }
     }
 }
