@@ -16,16 +16,18 @@ namespace ChessCS
         private Evaluation evaluation;
         private ChessBoard examinedBoard;
         private Move[,] searchKiller;
+        private bool nullPruning;
         public Search(int maxDepth)
         {
             evaluation = new Evaluation();
             this.maxDepth = maxDepth;
             searchKiller = new Move[maxDepth, 2];
+            this.nullPruning = true;
         }
 
         public static Move SearchMove(ChessBoard examinedBoard, bool player, bool debug)
         {
-            Search search = new Search(3);
+            Search search = new Search(4);
             search.examinedBoard = examinedBoard.FastCopy();
             int color = (player == BLACK) ? 1 : -1;
             MNResult bestResult = search.RootNegaMax(search.maxDepth, -10000, 10000, color, false);
@@ -49,7 +51,7 @@ namespace ChessCS
                 examinedBoard.MakeMove(eleMove);
                 //Print information
                 Console.WriteLine(new string('\t', maxDepth - depth) + eleMove.ToString());
-                int value = -Negamax(depth - 1, -beta, -alpha, -color, debug);
+                int value = -Negamax(depth - 1, -beta, -alpha, -color, debug,nullPruning);
                 examinedBoard.UndoMove(eleMove);
 
                 if (value > bestValue)
@@ -68,13 +70,25 @@ namespace ChessCS
             }
             return new MNResult(bestMove, bestValue);
         }
-        private int Negamax(int depth, int alpha, int beta, int color, bool debug)
+        private int Negamax(int depth, int alpha, int beta, int color, bool debug, bool allowNull)
         {
-            if (depth == 0)
+            if (depth <= 0)
             {
                 int score = Evaluate(color, debug, depth);
                 return score;
             }
+            //Null move
+            if (allowNull)
+            {
+                int nullTurn = -color;
+                int val = -Negamax(depth - 1 - 2, -beta, -beta + 1, nullTurn, debug, false);
+                if (val >= beta)
+                {
+                    return val; //Cut off
+                }
+                    
+            }
+
             List<Move> possibleMoves = null;
             possibleMoves = (debug) ? DebugLegalMoves() : examinedBoard.LegalMovesForPlayer(color);
             if (possibleMoves.Count == 0)
@@ -90,7 +104,7 @@ namespace ChessCS
                 examinedBoard.MakeMove(eleMove);
                 //Print information
                 Console.Write("\n" + new string('\t', maxDepth - depth) + eleMove.ToString());
-                int value = -Negamax(depth - 1, -beta, -alpha, -color, debug);
+                int value = -Negamax(depth - 1, -beta, -alpha, -color, debug,nullPruning);
                 examinedBoard.UndoMove(eleMove);
                 bestValue = Math.Max(alpha, value);
                 alpha = Math.Max(alpha, value);
