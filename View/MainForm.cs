@@ -183,8 +183,19 @@ namespace ChessCS
             {
                 moveHistoryTextBox.AppendText($"  {move}");
             }
+            if (!isDebugMode)
+            {
+                int status=CheckEndGame();
+                if (status!=0)
+                {
+                    return;
+                }
+            }
             if (!isEnabledAI)
+            {
                 return;
+            }
+                
             if (this.chessBoard.ActiveColor==ChessBoard.BLACK)
             {
                 //Computer turn
@@ -199,11 +210,38 @@ namespace ChessCS
                 isSearchingForBestMove = false;
                 //
                 MakeMove(computerMove.X_Src, computerMove.Y_Src, computerMove.X_Des, computerMove.Y_Des);
+                if (!isDebugMode)
+                {
+                    CheckEndGame();
+                }
+                
             }
 
         }
         
-
+        private int CheckEndGame()
+        {
+            int status = chessBoard.CheckEndGame();
+            if (status!=0)
+            {
+                string message = (status == 1) ? "You won. Congratulation. Start a new game?" :
+                "You lose. Waana try another game?";
+                DialogResult result = MessageBox.Show(message);
+                if (result == DialogResult.OK)
+                {
+                    chessBoard.Reset();
+                    //Update GUI
+                    //Update info
+                    infoLabel.Text = $"Match - ActiveColor: {(chessBoard.ActiveColor ? "white" : "black")} fullMove:{chessBoard.FullMove}";
+                    //
+                    moveHistoryTextBox.Text = "";
+                    moveHistory.Clear();
+                    chessBoardControl.Invalidate();
+                }
+            }
+            return status;
+            
+        }
         private void getFENBtn_Click(object sender, EventArgs e)
         {
             logTextBox.Clear();

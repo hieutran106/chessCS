@@ -316,5 +316,32 @@ namespace ChessCS
             clonedBoard.FullMove = this.FullMove;
             return clonedBoard;
         }
+        public int CheckEndGame()
+        {
+            int whiteKingPos = -1;
+            int blackKingPos = -1;
+            for (int i=0;i<64;i++)
+            {
+                int row = i / 8;
+                int col = i % 8;
+                if (Board[row,col]=='K')
+                {
+                    whiteKingPos = i;
+                } else if (Board[row,col]=='k')
+                {
+                    blackKingPos = i;
+                }
+                
+            }
+            if (whiteKingPos == -1 && blackKingPos != -1)
+            {
+                return -1; //BLACK win
+            }
+            else if (blackKingPos == -1 && whiteKingPos != -1)
+            {
+                return 1;//WHITE win
+            }
+            else return 0;//Draw
+        }
     }
 }
