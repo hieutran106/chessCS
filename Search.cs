@@ -10,6 +10,10 @@ namespace ChessCS
     {
         public static bool BLACK = false;
         public static bool WHITE = true;
+
+        public static int BETA = 10000;
+        public static int ALPHA = -10000;
+
         private int visitedNode = 0;
 
         private int maxDepth;
@@ -30,7 +34,7 @@ namespace ChessCS
             Search search = new Search(4);
             search.examinedBoard = examinedBoard.FastCopy();
             int color = (player == BLACK) ? 1 : -1;
-            MNResult bestResult = search.RootNegaMax(search.maxDepth, -10000, 10000, color, false);
+            MNResult bestResult = search.RootNegaMax(search.maxDepth, ALPHA, BETA, color, false);
             Console.WriteLine("Best value:" + bestResult.Value + " Visited node:" + search.visitedNode);
             return bestResult.Move;
 
@@ -72,6 +76,8 @@ namespace ChessCS
         }
         private int Negamax(int depth, int alpha, int beta, int color, bool debug, bool allowNull)
         {
+
+
             if (depth <= 0)
             {
                 int score = Evaluate(color, debug, depth);
