@@ -64,7 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HashEntry.cs" />
     <Compile Include="RandomExtension.cs" />
+    <Compile Include="TranspositionTable.cs" />
     <Compile Include="View\AddPieceForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -21,12 +21,15 @@ namespace ChessCS
         private ChessBoard examinedBoard;
         private Move[,] searchKiller;
         private bool nullPruning;
+        //transposition table
+        private TranspositionTable table;
         public Search(int maxDepth)
         {
             evaluation = new Evaluation();
             this.maxDepth = maxDepth;
             searchKiller = new Move[maxDepth, 2];
             this.nullPruning = true;
+            table = new TranspositionTable();
         }
 
         public static Move SearchMove(ChessBoard examinedBoard, bool player, bool debug)
@@ -76,21 +79,27 @@ namespace ChessCS
         }
         private int Negamax(int depth, int alpha, int beta, int color, bool debug, bool allowNull)
         {
-
+            int hashFlag = HashEntry.HASH_ALPHA;
+            int val = table.ProbeHash(examinedBoard.Hash, depth, alpha, beta);
+            if (val!=TranspositionTable.VAL_UNKNOWN)
+            {
+                return val;
+            }
 
             if (depth <= 0)
             {
                 int score = Evaluate(color, debug, depth);
+                table.RecordHash(examinedBoard.Hash, score, HashEntry.HASH_EXACT,depth);
                 return score;
             }
             //Null move
             if (allowNull)
             {
                 int nullTurn = -color;
-                int val = -Negamax(depth - 1 - 2, -beta, -beta + 1, nullTurn, debug, false);
-                if (val >= beta)
+                int nullValue = -Negamax(depth - 1 - 2, -beta, -beta + 1, nullTurn, debug, false);
+                if (nullValue >= beta)
                 {
-                    return val; //Cut off
+                    return nullValue; //Cut off
                 }
                     
             }

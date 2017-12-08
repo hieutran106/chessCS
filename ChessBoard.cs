@@ -192,6 +192,8 @@ namespace ChessCS
             //Update board data
             Board[move.X_Src, move.Y_Src] = move.Piece;
             Board[move.X_Des, move.Y_Des] = move.Capture;
+            //Update hash value
+            Hash = zobrist.UpdateHash(Hash, move);
             //update active color and full move
             if (ActiveColor==BLACK)
             {

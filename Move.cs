@@ -66,9 +66,7 @@ namespace ChessCS
             int score = 0;
             if (Capture != '.')
             {
-
                 score = Move.mvvLva[char.ToUpper(Capture)] + 6 - Move.mvvLva[char.ToUpper(Piece)] / 100;
-
             }
             return score;
         }

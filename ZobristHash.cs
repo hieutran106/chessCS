@@ -22,24 +22,47 @@ namespace ChessCS
         }
         public ulong UpdateHash(ulong oriHash, Move move)
         {
+            return UpdateHash(oriHash, move, false);
+        }
+        public ulong UpdateHash(ulong oriHash, Move move, bool makeMove)
+        {
             ulong hash = oriHash;
-            //if capture XORing out the piece at dst
-            int index;
-            if (move.Capture!='.')
+            if (makeMove==true) //Update hash when making a move
+            {               
+                //if capture XORing out the piece at dst
+                int index;
+                if (move.Capture != '.')
+                {
+                    index = indexOf(move.Capture);
+                    hash ^= table[move.Dst, index];
+                }
+
+                index = indexOf(move.Piece);
+                if (index != -1)
+                {
+                    //XORing out the piece at source
+                    hash ^= table[move.Src, index];
+                    //XORing in the piece at dst
+                    hash ^= table[move.Dst, index];
+                }                
+            } else //Undo a Move
             {
-                index = indexOf(move.Capture);
+                int index = indexOf(move.Piece);
+                //XORing in the piece at source
+                if (index !=-1)
+                {
+                    hash ^= table[move.Src, index];
+                }
+                //XORing out the piece at destination
                 hash ^= table[move.Dst, index];
+                //XORing in the Capture piece
+                if (move.Capture!='.')
+                {
+                    index = indexOf(move.Capture);
+                    hash ^= table[move.Dst, index];
+                }
+                
             }
-            
-            index = indexOf(move.Piece);
-            if (index!=-1)
-            {
-                //XORing out the piece at source
-                hash ^= table[move.Src, index];
-                //XORing in the piece at dst
-                hash ^= table[move.Dst, index];
-            }
-          
             return hash;
         }
         public ulong Hash(char[,] board)

@@ -280,6 +280,10 @@ namespace ChessCS
 
         private void backBtn_Click(object sender, EventArgs e)
         {
+            if (moveHistory.Count==0)
+            {
+                return;
+            }
             Move move = moveHistory.Pop();
             chessBoard.UndoMove(move);
 
