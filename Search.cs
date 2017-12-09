@@ -23,6 +23,7 @@ namespace ChessCS
         private bool nullPruning;
         //transposition table
         private TranspositionTable table;
+        public int cacheHit;
         public Search(int maxDepth)
         {
             evaluation = new Evaluation();
@@ -39,6 +40,7 @@ namespace ChessCS
             int color = (player == BLACK) ? 1 : -1;
             MNResult bestResult = search.RootNegaMax(search.maxDepth, ALPHA, BETA, color, false);
             Console.WriteLine("Best value:" + bestResult.Value + " Visited node:" + search.visitedNode);
+            Console.WriteLine("Cache hit:" + search.cacheHit);
             return bestResult.Move;
 
         }
@@ -80,16 +82,22 @@ namespace ChessCS
         private int Negamax(int depth, int alpha, int beta, int color, bool debug, bool allowNull)
         {
             int hashFlag = HashEntry.HASH_ALPHA;
+            
             int val = table.ProbeHash(examinedBoard.Hash, depth, alpha, beta);
             if (val!=TranspositionTable.VAL_UNKNOWN)
             {
+                cacheHit++;
                 return val;
             }
 
             if (depth <= 0)
             {
                 int score = Evaluate(color, debug, depth);
-                table.RecordHash(examinedBoard.Hash, score, HashEntry.HASH_EXACT,depth);
+                if (allowNull)
+                {
+                    table.RecordHash(examinedBoard.Hash, score, HashEntry.HASH_EXACT, depth);
+                }
+                
                 return score;
             }
             //Null move
@@ -122,7 +130,12 @@ namespace ChessCS
                 int value = -Negamax(depth - 1, -beta, -alpha, -color, debug,nullPruning);
                 examinedBoard.UndoMove(eleMove);
                 bestValue = Math.Max(alpha, value);
-                alpha = Math.Max(alpha, value);
+                //alpha = Math.Max(alpha, value);
+                if (value > alpha)
+                {
+                    hashFlag = HashEntry.HASH_EXACT;
+                    alpha = value;
+                }
                 if (alpha >= beta)
                 {
                     Console.Write(new string('\t', maxDepth - depth) + "Cut off");
@@ -132,10 +145,20 @@ namespace ChessCS
                         searchKiller[maxDepth - depth, 1] = searchKiller[maxDepth - depth, 0];
                         searchKiller[maxDepth - depth, 0] = eleMove;
                     }
+                    //Record hash
+                    if (allowNull)
+                    {
+                        table.RecordHash(examinedBoard.Hash, depth, beta, HashEntry.HASH_BETA);
+                    }
                     break;
                 }
 
             }
+            if (allowNull==true)
+            {
+                table.RecordHash(examinedBoard.Hash, depth, bestValue, hashFlag);
+            }
+            
             return bestValue;
         }
         private List<Move> DebugLegalMoves()
