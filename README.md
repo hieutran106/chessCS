@@ -7,4 +7,4 @@ A chess engine written in C#. The engine is built using optimized minimax algori
 - Source control (GIT)
 
 ###### Screenshots
-![Screenshot 1](hhttps://github.com/hieutran106/chessCS/raw/master/ChessCS_1.PNG)
+![Screenshot 1](https://github.com/hieutran106/chessCS/raw/master/ChessCS_1.PNG)
